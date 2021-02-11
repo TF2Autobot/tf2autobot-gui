@@ -1,3 +1,7 @@
+# CLONED FROM TF2-AUTOMATIC GUI MADE BY ZEUS, UPGRADING FOR TF2AUTOBOT SUPPORT.
+# NOT YET READY.
+
+<!--
 # TF2-Automatic GUI
 An easy to use graphical user interface that helps you add items faster to your bot's pricelist!
 
@@ -10,3 +14,4 @@ This project is open source and thus it takes more time to fix bugs, please be p
 # Contributing
 For contributing, please use eslint for linting, it makes code more readable and usable.
 Your PR can be closed if you don't follow this rule.
+-->
