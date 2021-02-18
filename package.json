@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build-front": "webpack",
-    "build-back": "tsc -p .",
+    "build-back": "tsc -p ./src/server",
     "lint": "eslint \"**/*.js\""
   },
   "repository": {
