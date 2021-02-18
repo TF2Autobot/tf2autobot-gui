@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+const webpack =require('webpack');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -24,7 +25,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('index', './src/client/index.ts')
-    //.addEntry('page1', './assets/page1.js')
+    .addEntry('base', './src/client/base.ts')
     //.addEntry('page2', './assets/page2.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
@@ -55,8 +56,12 @@ Encore
 
 // enables Sass/SCSS support
     .enableSassLoader()
+    .enablePostCssLoader()
     .enableTypeScriptLoader()
-
+    .addPlugin(new webpack.DefinePlugin({
+        __VUE_OPTIONS_API__: false,
+        __VUE_PROD_DEVTOOLS__: false,
+    }))
 // uncomment to get integrity="..." attributes on your script & link tags
 // requires WebpackEncoreBundle 1.4 or higher
     .enableIntegrityHashes(Encore.isProduction())
