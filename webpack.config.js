@@ -1,76 +1,65 @@
-const path = require('path');
-const webpack = require('webpack');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const {VueLoaderPlugin} = require('vue-loader')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const Encore = require('@symfony/webpack-encore');
 
-module.exports = {
-    mode: 'development',
-
-    entry: {
-        index: './src/client/index.ts'
-    },
-
-    output: {
-        path: path.resolve(__dirname, 'public/build'),
-        publicPath: 'build/'
-    },
-
-    plugins: [
-        new webpack.ProgressPlugin(),
-        new MiniCssExtractPlugin({ filename:'main.[contenthash].css' }),
-        new WebpackManifestPlugin({
-            basePath: '',
-            //useEntryKeys: true,
-            //filter: a => true
-            generate: (seed, files, entries) => {
-                console.log(seed);
-                console.log(files)
-                console.log(entries)
-                return entries;
-            }
-        }),
-        new VueLoaderPlugin(),
-        new CleanWebpackPlugin(),
-    ],
-    module: {
-        rules: [{
-            test: /\.ts$/,
-            loader: 'ts-loader',
-            options: {
-                appendTsSuffixTo: [/\.vue$/],
-            }
-        }, {
-            test: /.(sa|sc|c)ss$/,
-
-            use: [{
-                loader: MiniCssExtractPlugin.loader
-            }, {
-                loader: "css-loader",
-
-                options: {
-                    sourceMap: true
-                }
-            }, {
-                loader: "sass-loader",
-
-                options: {
-                    sourceMap: true
-                }
-            }]
-        },
-            {
-                test: /\.vue$/,
-                loader: 'vue-loader'
-            },
-            {
-                test: /\.html$/i,
-                loader: 'html-loader',
-            },]
-    },
-    optimization: {
-        splitChunks: { chunks: "all" },
-        runtimeChunk: { name: "runtime" },
-    },
+// Manually configure the runtime environment if not already configured yet by the "encore" command.
+// It's useful when you use tools that rely on webpack.config.js file.
+if (!Encore.isRuntimeEnvironmentConfigured()) {
+    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
 }
+
+Encore
+    // directory where compiled assets will be stored
+    .setOutputPath('public/build/')
+    // public path used by the web server to access the output path
+    .setPublicPath('/build')
+    // only needed for CDN's or sub-directory deploy
+    //.setManifestKeyPrefix('build/')
+
+    /*
+     * ENTRY CONFIG
+     *
+     * Add 1 entry for each "page" of your app
+     * (including one that's included on every page - e.g. "app")
+     *
+     * Each entry will result in one JavaScript file (e.g. app.js)
+     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
+     */
+    .addEntry('index', './src/client/index.ts')
+    //.addEntry('page1', './assets/page1.js')
+    //.addEntry('page2', './assets/page2.js')
+
+    // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
+    .splitEntryChunks()
+
+    // will require an extra script tag for runtime.js
+    // but, you probably want this, unless you're building a single-page app
+    .enableSingleRuntimeChunk()
+
+
+    /*
+     * FEATURE CONFIG
+     *
+     * Enable & configure other features below. For a full
+     * list of features, see:
+     * https://symfony.com/doc/current/frontend.html#adding-more-features
+     */
+    .cleanupOutputBeforeBuild()
+    .enableSourceMaps(!Encore.isProduction())
+    // enables hashed filenames (e.g. app.abc123.css)
+    .enableVersioning(Encore.isProduction())
+
+    // enables @babel/preset-env polyfills
+    .configureBabelPresetEnv((config) => {
+        config.useBuiltIns = 'usage';
+        config.corejs = 3;
+    })
+
+// enables Sass/SCSS support
+    .enableSassLoader()
+    .enableTypeScriptLoader()
+
+// uncomment to get integrity="..." attributes on your script & link tags
+// requires WebpackEncoreBundle 1.4 or higher
+    .enableIntegrityHashes(Encore.isProduction())
+    .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
+;
+module.exports = Encore.getWebpackConfig();
