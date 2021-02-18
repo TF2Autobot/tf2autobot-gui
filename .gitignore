@@ -4,3 +4,5 @@ config/*
 !config/paths.js
 .env
 data
+dist
+public/build

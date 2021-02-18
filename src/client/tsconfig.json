@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "ES2018",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "allowJs": true,
+    "checkJs": true,
+    "rootDir": "./",
+    "removeComments": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["./types/modules",
+      "../../node_modules/@types"
+    ]
+  },
+
+  "exclude": [
+    "../../node_modules", "**/__mocks__/*", "**/__tests__/*", "../../node_modules/@types/webpack/index.d.ts"
+  ],
+  "include": [
+    "./"
+  ]
+}
