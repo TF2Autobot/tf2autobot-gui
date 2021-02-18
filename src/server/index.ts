@@ -1,4 +1,5 @@
-const express = require('express');
+import express from 'express';
+import path from 'path';
 const app = express();
 const port = 3000;
 
@@ -12,5 +13,6 @@ app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
 app.set('views', './src/client/views')
-    .set('view engine', 'ejs')
+    .set('view engine', 'twig')
+    .engine('html', Twig.__express)
     .use(express.static('./public'));
