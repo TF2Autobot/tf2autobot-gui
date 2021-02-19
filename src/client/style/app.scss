@@ -1,0 +1,21 @@
+@import "custom";
+@import "~bootstrap/scss/bootstrap";
+
+.unselectable {
+	-webkit-user-select: none; /* Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
+}
+
+.fc-bg-event {
+	--fc-bg-event-opacity: 0.7; //background event color
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgb(255, 255, 255);
+}
+.btn-primary {
+	@extend .btn-primary;
+	color: white;
+}
