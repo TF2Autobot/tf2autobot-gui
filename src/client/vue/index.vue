@@ -5,7 +5,7 @@
         <modal id="test" title="ok"></modal>
         <div class="d-flex">
             <item :item="{name: 'helloW', enabled: true, style: {image_small: 'https://steamcdn-a.akamaihd.net/apps/440/icons/pile_of_junk2.c5823a4ad9cec27d29ca0ddf049a5af0796ea9bd.png'}, intent: 2, buy: {string: '10Keys'}, sell: {string: '50keys'}}"></item>
-            <item :item="{name: 'helloA', style: {image_small: 'https://steamcdn-a.akamaihd.net/apps/440/icons/pile_of_junk2.c5823a4ad9cec27d29ca0ddf049a5af0796ea9bd.png'}, intent: 1, buy: {}, sell: {}}"></item>
+            <item :item="{name: 'helloA', autoprice: true,  style: {image_small: 'https://steamcdn-a.akamaihd.net/apps/440/icons/pile_of_junk2.c5823a4ad9cec27d29ca0ddf049a5af0796ea9bd.png'}, intent: 1, buy: {}, sell: {}}"></item>
         </div>
     </div>
 </template>

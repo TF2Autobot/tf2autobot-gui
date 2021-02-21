@@ -18,23 +18,23 @@ if (isNaN(+port)) {
 }
 
 // Maybe just require in the app.use instead of vars
-import index from '../routes/index';
-import removeItems from '../routes/removeItems';
-import addItem from '../routes/addItem';
-import addItems from '../routes/addItems';
-import trades from '../routes/trades';
-import changeItem from '../routes/changeItem';
-import clearPricelist from '../routes/clearPricelist';
-import search from '../routes/search';
-import getItems from '../routes/getItems';
-import profit from '../routes/profit';
-import autoprice from '../routes/autoprice';
-import authRoutes from '../routes/auth';
+import index from '../routes';
+import removeItems from '../routesOld/removeItems';
+import addItem from '../routesOld/addItem';
+import addItems from '../routesOld/addItems';
+import trades from '../routesOld/trades';
+import changeItem from '../routesOld/changeItem';
+import clearPricelist from '../routesOld/clearPricelist';
+import search from '../routesOld/search';
+import getItems from '../routesOld/getItems';
+import profit from '../routesOld/profit';
+import autoprice from '../routesOld/autoprice';
+import authRoutes from '../routesOld/auth';
 
 passport.serializeUser(function(user, done) {
 	done(null, user);
 });
-  
+
 passport.deserializeUser(function(obj, done) {
 	done(null, obj);
 });
@@ -112,7 +112,7 @@ app
 	.use('/profit', profit)
 	.use('/autoprice', autoprice)
 	.use('/auth', authRoutes);
-	
+
 app.get('/logout', function(req, res) {
 	req.logout();
 	res.redirect('/');

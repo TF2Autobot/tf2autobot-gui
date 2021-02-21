@@ -32,47 +32,43 @@
 // 		throw err;
 // 	});
 
-
-// process
-// 	.on('uncaughtException', (err) => {
-// 		console.log('Received an uncaugh error.');
-// 		console.log(`Error message: ${err.message}`);
-// 		console.log(`Error stack: ${err.stack}`);
-// 		console.log('Please report this bug @ https://github.com/TF2Autobot/tf2autobot-gui/issues/new');
-// 	})
-// 	.on('unhandledRejection', (reason, p) => {
-// 		console.log('Received an unhandled rejection.');
-// 		console.log(p);
-// 		console.log('Please report this @ https://github.com/TF2Autobot/tf2autobot-gui/issues/new');
-// 	});
-
 import express from 'express';
-import path from 'path';
-const app = express();
+import initApp from './express/init';
+import path from "path";
+// import {Bot} from "./Bot";
 const port = 3000;
-import Twig from 'twig'
-console.log();
-Twig.extendFunction('load_entry_tags', function (entrypoint, type){
-    let entrypoints = require(path.join(require(path.join(process.cwd(), 'webpack.config.js')).output.path, './entrypoints.json')).entrypoints
-    if(!entrypoints[entrypoint] || !entrypoints[entrypoint][type]) return'';
-    return entrypoints[entrypoint][type].map((e)=>{
-            return type == 'js' ? `<script src="${e}" defer></script>` : `<link rel="stylesheet" href="${e}">`
-        })
-        .reduce((buffer, e)=>{
-            return buffer + e;
-        }, '');
-})
 
-app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-    res.render('index');
-})
+
+console.log('tf2autobot-gui v' + require(path.join(process.cwd(), 'package.json')).version + ' is starting...');
+const app = express();
+initApp(app);
+
+
+// var bots = new Map() as  Map<Number, Bot>;
+//
+//
+// app.use((req, res, next) => {
+//     if(req.session.botID && bots.has(req.session.botID) && bots.get(req.session.botID).admins.includes()) {
+//
+//     } else {
+//         res.render('pickBot');
+//     }
+// });
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
-app.set('views', './src/client/views')
-    .set('view engine', 'twig')
-    .engine('html', Twig.__express)
-    .use(express.static('./public'));
+    console.log(`Example app listening at http://localhost:${port}`);
+});
+
+process
+    .on('uncaughtException', (err) => {
+        console.log('Received an uncaugh error.');
+        console.log(`Error message: ${err.message}`);
+        console.log(`Error stack: ${err.stack}`);
+        console.log('Please report this bug @ https://github.com/TF2Autobot/tf2autobot-gui/issues/new');
+    })
+    .on('unhandledRejection', (reason, p) => {
+        console.log('Received an unhandled rejection.');
+        console.log(p);
+        console.log('Please report this @ https://github.com/TF2Autobot/tf2autobot-gui/issues/new');
+    });
