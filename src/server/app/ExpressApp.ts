@@ -29,7 +29,7 @@ import search from '../routesOld/search';
 import getItems from '../routesOld/getItems';
 import profit from '../routesOld/profit';
 import autoprice from '../routesOld/autoprice';
-import authRoutes from '../routesOld/auth';
+import authRoutes from '../routes/auth';
 
 passport.serializeUser(function(user, done) {
 	done(null, user);

@@ -37,7 +37,7 @@ export =  function init(app: Express): void {
                 return next();
             }
             if (req.user) { // Is logged in
-                if (req.session.bot.admins.includes(req.user.id)) { // Is an admin, continue
+                if (true  || req.session.bot.admins.includes(req.user.id)) { // Is an admin, continue TODO: remove true
                     return next();
                 }
                 res.status(401);

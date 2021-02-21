@@ -1,8 +1,6 @@
 // 'use strict';
 
 // import path from 'path';
-// import dotenv from 'dotenv';
-// dotenv.config({ path: path.join(__dirname, '../.env') });
 
 // import fs from 'fs-extra';
 // import * as Schema from './app/Schema';
@@ -31,10 +29,12 @@
 // 	.catch((err) => {
 // 		throw err;
 // 	});
+import path from "path";
+import dotenv from 'dotenv';
+dotenv.config({ path: path.join(process.cwd(), '.env') });
 
 import express from 'express';
 import initApp from './express/init';
-import path from "path";
 // import {Bot} from "./Bot";
 const port = 3000;
 
