@@ -55,6 +55,7 @@ schemaManager.init(err => {
     } else {
         initApp(app, schemaManager);
         app.listen(+port);
+        console.log('server listening on port ' + port);
     }
 })
 
