@@ -5,72 +5,18 @@ import {getImageStyle} from "../utils/getImage";
 import {Pricelist} from "../../common/types/pricelist";
 import SchemaManager from "tf2-schema-2";
 import SKU from 'tf2-sku-2';
+import paths from '../config/paths';
+import fs from "fs-extra";
 
 export = function (schemaManager: SchemaManager): Router {
     const router = express.Router();
     const schema = schemaManager.schema;
     router.get('/', (req, res) => {
-        const pricelist = [
-            {
-                "sku": "1099;6",
-                "enabled": true,
-                "autoprice": true,
-                "max": 1,
-                "min": 0,
-                "intent": 1,
-                "name": "The Tide Turner",
-                "buy": {
-                    "keys": 0,
-                    "metal": 0.05
-                },
-                "sell": {
-                    "keys": 0,
-                    "metal": 0.11
-                },
-                "time": 1613838326
-            },
-            {
-                "sku": "593;6",
-                "enabled": true,
-                "autoprice": true,
-                "max": 1,
-                "min": 0,
-                "intent": 1,
-                "name": "The Third Degree",
-                "buy": {
-                    "keys": 0,
-                    "metal": 0.05
-                },
-                "sell": {
-                    "keys": 0,
-                    "metal": 0.11
-                },
-                "time": 1613838135
-            },
-            {
-                "sku": "1101;6",
-                "enabled": true,
-                "autoprice": true,
-                "max": 1,
-                "min": 0,
-                "intent": 1,
-                "name": "The B.A.S.E. Jumper",
-                "buy": {
-                    "keys": 0,
-                    "metal": 0.05
-                },
-                "sell": {
-                    "keys": 0,
-                    "metal": 0.11
-                },
-                "time": 1613838096
-            }
-        ] as Pricelist;
-        const keyPrice = 56; //TODO fetch
+        const pricelist = fs.readJSONSync(paths.files.pricelist) as Pricelist; //TODO fetch from bot
+        const keyPrice = 56; //TODO fetch from bot
         for (let i = 0; i < pricelist.length; i++) {
             const item = pricelist[i];
             if (!item.name) {
-
                 item.name = schema.getName(SKU.fromString(item.sku));
             }
             item.statslink = getStatsLink(item.sku, schema);
