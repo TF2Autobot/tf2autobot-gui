@@ -1,17 +1,16 @@
-import { getSchema } from '../app/Schema';
 import SKU from 'tf2-sku-2';
 import { qualityColors, paintCanColors } from '../lib/data';
+import SchemaManager from "tf2-schema-2";
 
 /**
- * 
+ *
  * @param {string} sku item SKU
+ * @param schema
  * @return {Object} Item image links - {small: 'link', large: 'link'}
  */
-export function getImageFromSKU(sku: string): ImageFromSKU {
-    const schema = getSchema();
-
+export function getImageFromSKU(sku: string, schema: SchemaManager.Schema): ImageFromSKU {
 	const item = SKU.fromString(sku);
-	const found = schema.getItemByItemName(schema.getName(item));
+	const found = schema.getItemByDefindex(item.defindex);
 
 	if (!found) {
 		console.log('Item with defindex ' + item.defindex + ' is not in schema');
@@ -34,10 +33,11 @@ export function getImageFromSKU(sku: string): ImageFromSKU {
 /**
  * generates colour for items quality
  * @param {String} sku item SKU
+ * @param schema
  * @return {Object} {color in hexadecimal string, craflable, image_url, image_url_large}
  */
-export function getImageStyle(sku: string): ImageStyle {
-	const img = getImageFromSKU(sku);
+export function getImageStyle(sku: string, schema: SchemaManager.Schema): ImageStyle {
+	const img = getImageFromSKU(sku, schema);
 	const item = SKU.fromString(sku);
 	const ks = [
 		'', // no killstreak

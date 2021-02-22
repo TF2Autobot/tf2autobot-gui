@@ -1,7 +1,7 @@
 import path from 'path';
 
 const folders = {
-	data: process.env.VPS == 'true' ? process.env.BOT_DATA_FOLDER : './config'
+	data: path.join(process.cwd(), 'data')
 };
 
 const files = {

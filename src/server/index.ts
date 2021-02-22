@@ -3,7 +3,7 @@
 // import path from 'path';
 
 // import fs from 'fs-extra';
-// import * as Schema from './app/Schema';
+
 // import express from './app/ExpressApp';
 
 // let port = process.env.PORT ? process.env.PORT : 3000;
@@ -22,19 +22,14 @@
 // 	port = 3000;
 // }
 
-// Schema.init()
-// 	.then(() => {
-// 		express.listen(+port);
-// 	})
-// 	.catch((err) => {
-// 		throw err;
-// 	});
+
 import path from "path";
 import dotenv from 'dotenv';
 dotenv.config({ path: path.join(process.cwd(), '.env') });
 
 import express from 'express';
 import initApp from './express/init';
+import SchemaManager from 'tf2-schema-2';
 // import {Bot} from "./Bot";
 const port = 3000;
 
@@ -42,8 +37,6 @@ const port = 3000;
 
 console.log('tf2autobot-gui v' + require(path.join(process.cwd(), 'package.json')).version + ' is starting...');
 const app = express();
-initApp(app);
-
 
 // var bots = new Map() as  Map<Number, Bot>;
 //
@@ -55,10 +48,16 @@ initApp(app);
 //         res.render('pickBot');
 //     }
 // });
+const schemaManager = new SchemaManager({apiKey: process.env.API_KEY});
+schemaManager.init(err => {
+    if(err) {
+        console.log('Schema manager failed to init, with error: ' + err)
+    } else {
+        initApp(app, schemaManager);
+        app.listen(+port);
+    }
+})
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
-});
 
 process
     .on('uncaughtException', (err) => {

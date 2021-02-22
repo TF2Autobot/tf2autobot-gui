@@ -2,7 +2,7 @@
   "name": "tf2autobot-gui",
   "version": "3.0.0",
   "description": "An interface to easily manage your tf2autobot",
-  "main": "dist/index.js",
+  "main": "dist/server/index.js",
   "scripts": {
     "build-front": "encore dev",
     "build-front-watch": "encore dev --watch",
@@ -31,7 +31,8 @@
     "node-ipc": "^9.1.3",
     "passport": "^0.4.1",
     "passport-steam": "^1.0.15",
-    "tf2-schema-2": "^1.2.5",
+    "tf2-currencies-2": "^1.2.5",
+    "tf2-schema-2": "^1.3.0",
     "tf2-sku-2": "^1.0.3",
     "twig": "^1.15.4",
     "vue": "^3.0.5"

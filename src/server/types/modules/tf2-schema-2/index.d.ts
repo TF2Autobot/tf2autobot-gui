@@ -267,6 +267,8 @@ declare module 'tf2-schema-2' {
             getUncraftableWeaponsForTrading(): string[];
 
             toJSON(): { version: string; time: number; raw: Record<string, any> };
+
+            getItemBySKU(sku: string): SchemaItem | null;
         }
     }
 

@@ -1,11 +1,10 @@
-import { getSchema } from '../app/Schema';
 import isObject from 'isobject';
 
 export = function({ item, schemaItem }) {
 	if (!isCrate(schemaItem)) {
 		return;
 	}
-	
+
 	let series = null;
 
 	if (schemaItem.attributes) {
@@ -20,7 +19,7 @@ export = function({ item, schemaItem }) {
 
     const itemsGameItem = getSchema().raw.items_game.items[item.defindex];
 
-	
+
 	if (itemsGameItem.static_attrs && itemsGameItem.static_attrs['set supply crate series'] !== undefined) {
 		const seriesAttribute = itemsGameItem.static_attrs['set supply crate series'];
 
@@ -37,7 +36,7 @@ function isCrate({ item_class }) {
 // eslint-disable-next-line require-jsdoc
 function findSeriesInAtrributes(attributes) {
 	let series = null;
-	
+
 	attributes.forEach((attribute) => {
 		if (attribute.name === 'set supply crate series') {
 			series = attribute.value;

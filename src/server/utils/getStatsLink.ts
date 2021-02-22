@@ -1,20 +1,21 @@
-import { getSchema } from '../app/Schema';
 import * as data from '../lib/data';
 import SKU from 'tf2-sku-2';
 import { Item } from '../types/TeamFortress2';
+import SchemaManager from "tf2-schema-2";
 
 /**
- * 
+ *
  * @param {(string|Object)} item - SKU or item object
+ * @param schema
  * @return {string} - Full bptf stats link
  */
-export default function getStatsLink(item: Item): string {
+export default function getStatsLink(item: Item | string, schema: SchemaManager.Schema): string {
 	// If its a sku and not an item object
 	if (typeof item === 'string') {
 		item = SKU.fromString(item);
 	}
 
-	const schemaItem = getSchema().getItemByDefindex(item.defindex);
+	const schemaItem = schema.getItemByDefindex(item.defindex);
 	if (!schemaItem) {
 		return null;
 	}
