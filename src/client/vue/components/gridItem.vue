@@ -77,6 +77,7 @@ $dark: #212529; //From bootstrap
     background-color:rgba(255, 255, 255, 0.7);
     overflow-x: hidden;
     overflow-y: hidden;
+    color: $dark;
     @extend %unselectable;
     :hover > & {
         visibility: visible;
