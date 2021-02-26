@@ -6,4 +6,5 @@ export = function init(app: Express, schemaManager: SchemaManager): void {
     app .use('/', require('../routes'))
         .use('/pricelist', (require('../routes/pricelist'))(schemaManager))
         .use('/auth', require('../routes/auth'))
+        .use('/search', require('../routes/search')(schemaManager))
 }
