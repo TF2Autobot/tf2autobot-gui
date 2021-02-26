@@ -1,6 +1,6 @@
 import isObject from 'isobject';
 
-export = function({ item, schemaItem }) {
+export = function({ item, schemaItem }, schema) {
 	if (!isCrate(schemaItem)) {
 		return;
 	}
@@ -17,7 +17,7 @@ export = function({ item, schemaItem }) {
 	}
 
 
-    const itemsGameItem = getSchema().raw.items_game.items[item.defindex];
+    const itemsGameItem = schema.raw.items_game.items[item.defindex];
 
 
 	if (itemsGameItem.static_attrs && itemsGameItem.static_attrs['set supply crate series'] !== undefined) {

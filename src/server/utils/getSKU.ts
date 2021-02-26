@@ -1,4 +1,3 @@
-import { getSchema } from '../app/Schema';
 import { wear, wears, quality, qualities, effect, effects, killstreak, killstreaks, skin, skins } from '../lib/data';
 import SKU from 'tf2-sku-2';
 import fixItem from '../utils/fixItem';
@@ -8,17 +7,18 @@ import fixItem from '../utils/fixItem';
  * @param {string} search - BPTF stats link, SKU or item name.
  * @return {string} - The generated SKU
  */
-export default function getSKU(search: any): string {
+export default function getSKU(search: string, schema): string {
 	if (search.includes(';')) { // too lazy
 		return SKU.fromObject(
 			fixItem(
 				SKU.fromString(
 					search
-				)
+				),
+				schema
 			)
 		);
 	}
-	
+
 	const item = {
 		defindex: '',
 		quality: 6,
@@ -31,7 +31,7 @@ export default function getSKU(search: any): string {
 		paintkit: null,
 		quality2: null
 	};
-	
+
 	let name;
 
 	if (search.includes('backpack.tf/stats')) { // input is a stats page URL
@@ -40,9 +40,9 @@ export default function getSKU(search: any): string {
 			.split('/');
 
 		name = decodeURIComponent(searchParts[2]).replace('| ', ''); // Decode and just remove | by default since bptf has that for skins, not *that* good but decent
-		
+
 		const urlQuality = decodeURI(searchParts[1]);
-		
+
 		item.craftable = searchParts[4] === 'Craftable' ? true : false;
 
 		if (urlQuality == 'Strange Unusual') {
@@ -70,7 +70,7 @@ export default function getSKU(search: any): string {
 				if (name.includes(qualities[i])) {
 					name = name.replace(qualities[i] + ' ', '');
 					item.quality = quality[qualities[i]];
-					
+
 					break;
 				}
 			}
@@ -86,7 +86,7 @@ export default function getSKU(search: any): string {
 					item.quality = 5;
 					item.quality2 = 11;
 				}
-				
+
 				break;
 			}
 		}
@@ -103,7 +103,7 @@ export default function getSKU(search: any): string {
 		if (name.includes(wears[i])) {
 			name = name.replace(' ' + wears[i], '');
 			item.wear = wear[wears[i]];
-			
+
 			break;
 		}
 	}
@@ -114,11 +114,11 @@ export default function getSKU(search: any): string {
 			if (name.includes(skins[i])) {
 				name = name.replace(skins[i] + ' ', '');
 				item.paintkit = skin[skins[i]];
-				
+
 				if (item.effect) { // override decorated quality if it is unusual
 					item.quality = 5;
 				}
-				
+
 				break;
 			}
 		}
@@ -129,7 +129,7 @@ export default function getSKU(search: any): string {
 		if (name.includes(killstreaks[i])) {
 			name = name.replace(killstreaks[i] + ' ', '');
 			item.killstreak = killstreak[killstreaks[i]];
-			
+
 			break;
 		}
 	}
@@ -151,7 +151,7 @@ export default function getSKU(search: any): string {
 	if (name.includes('War Paint')) {
 		defindex = 16102; // Defindexes for war paints get corrected when fixing sku
 	} else {
-		defindex = getDefindex(name);
+		defindex = getDefindex(name, schema);
 	}
 
 	if (defindex === false) {
@@ -160,9 +160,9 @@ export default function getSKU(search: any): string {
 	}
 
 	item.defindex = defindex;
-	
+
 	return SKU.fromObject(
-		fixItem(item)
+		fixItem(item, schema)
 	);
 }
 
@@ -171,10 +171,9 @@ export default function getSKU(search: any): string {
  * @param {string} search - Item name without quality/effect/festivized/etc
  * @return {(int|bool)} - Found defindex, false if none is found
  */
-function getDefindex(search) {
-	const schema = getSchema();
+function getDefindex(search, schema) {
 	const { items } = schema.raw.schema;
-	
+
 	for (let i = 0; i < items.length; i++) {
 		// eslint-disable-next-line camelcase
 		const { item_name, defindex } = items[i];

@@ -1,17 +1,14 @@
 import { defindexes } from '../lib/data';
 import _ from 'lodash';
-import { getSchema } from '../app/Schema';
-import { SchemaItem } from 'tf2-schema-2';
+import SchemaManager, {SchemaItem} from "tf2-schema-2";
 
-const schema = getSchema();
-
-export = function(itemInfo) {
+export = function(itemInfo, schema: SchemaManager.Schema) {
 	if (isStockWeapon(itemInfo.schemaItem)) {
 		fixStockWeaponDefindex(itemInfo);
 	} else if (isFixablePromo(isPromotedItem(itemInfo.schemaItem), itemInfo.item)) {
 		fixPromoDefindex(itemInfo);
-	} else if (hasPaintKit(itemInfo.item) && hasAttributesAndIsNotDecorated(itemInfo)) {
-		fixWarPaintDefindex(itemInfo);
+	} else if (hasPaintKit(itemInfo.item) && hasAttributesAndIsNotDecorated(itemInfo,schema)) {
+		fixWarPaintDefindex(itemInfo, schema);
 	} else {
 		fixExceptionsDefindex(itemInfo);
 	}
@@ -70,19 +67,19 @@ function isPromotedItem(schemaItem: SchemaItem) {
 }
 
 // eslint-disable-next-line require-jsdoc
-function hasAttributesAndIsNotDecorated({ item, schemaItem }) {
-	return schemaItem.item_quality != 15 || !hasCorrectPaintkitAttribute(item);
+function hasAttributesAndIsNotDecorated({ item, schemaItem }, schema) {
+	return schemaItem.item_quality != 15 || !hasCorrectPaintkitAttribute(item, schema);
 }
 
 // eslint-disable-next-line require-jsdoc
-function hasCorrectPaintkitAttribute(item) {
+function hasCorrectPaintkitAttribute(item, schema) {
 	return schema.raw.items_game.items[item.defindex].static_attrs !== undefined && schema.raw.items_game.items[item.defindex].static_attrs['paintkit_proto_def_index'] == item.paintkit;
 }
 
 // eslint-disable-next-line require-jsdoc
-function fixWarPaintDefindex({ item }) {
+function fixWarPaintDefindex({ item }, schema) {
 	const gameItems = schema.raw.items_game.items;
-	
+
 	_.forOwn(gameItems, (gameItem, defindex) => {
 		if (!Object.prototype.hasOwnProperty.call(gameItems, defindex)) {
 			return;

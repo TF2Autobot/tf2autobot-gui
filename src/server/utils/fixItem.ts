@@ -1,15 +1,14 @@
-import { getSchema } from '../app/Schema';
-
 import fixDefindex from './fixDefindex';
 import findCrateSeries from './findCrateSeries';
 import fixQuality from './fixQuality';
+import SchemaManager from "tf2-schema-2";
 
 /**
  * Fixes item.
  * @param {Object} sku
  * @return {Object} - Fixed item object
  */
-export = (sku) => {
+export = (sku, schema: SchemaManager.Schema) => {
 	/**
 	 * Naming
 	 * item
@@ -19,7 +18,6 @@ export = (sku) => {
 	 * gameItem
 	 * gameItems
 	 */
-    const schema = getSchema();
 	const schemaItem = schema.getItemByDefindex(sku.defindex);
 
 	if (schemaItem === null) {
@@ -32,8 +30,8 @@ export = (sku) => {
 		schemaItem
 	};
 
-	fixDefindex(itemInfo);
-	findCrateSeries(itemInfo);
+	fixDefindex(itemInfo, schema);
+	findCrateSeries(itemInfo, schema);
 	fixQuality(itemInfo);
 
 	return sku;
