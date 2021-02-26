@@ -1,5 +1,4 @@
 import { defindexes } from '../lib/data';
-import _ from 'lodash';
 import SchemaManager, {SchemaItem} from "tf2-schema-2";
 
 export = function(itemInfo, schema: SchemaManager.Schema) {
@@ -80,7 +79,8 @@ function hasCorrectPaintkitAttribute(item, schema) {
 function fixWarPaintDefindex({ item }, schema) {
 	const gameItems = schema.raw.items_game.items;
 
-	_.forOwn(gameItems, (gameItem, defindex) => {
+	Object.keys(gameItems).forEach((defindex) => {
+		const gameItem = gameItems[defindex];
 		if (!Object.prototype.hasOwnProperty.call(gameItems, defindex)) {
 			return;
 		}
