@@ -1,5 +1,6 @@
 import * as Vue from 'vue'
 import index from './vue/index.vue'
+import 'pretty-checkbox/'
 
 Vue.createApp(index).mount(
     '#app'

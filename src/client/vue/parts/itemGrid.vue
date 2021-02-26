@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import item from './gridItem.vue'
+import item from '../components/gridItem.vue'
 export default {
     props: {
         pricelist: Array,

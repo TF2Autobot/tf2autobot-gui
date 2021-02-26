@@ -1,5 +1,5 @@
 <template>
-    <table class="table table-hover">
+    <table class="table table-dark">
         <thead>
             <tr>
                 <th scope="col">SKU</th>
@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import item from './gridItem.vue'
+import item from '../components/gridItem.vue'
 export default {
     props: {
         pricelist: Array,
@@ -78,20 +78,16 @@ export default {
     width: 64px;
     height: 64px;
 }
-.item-list .autoprice-symbol {
-    color: #29a30e;
-}
-.item-list .autoprice-symbol.disabled {
-    color: #cccccc;
-}
+
 .item-list{
     width: 100%;
     height: 64px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border: 2px solid black;
-    border-radius: 5px;
-    position: relative;
+    .autoprice-symbol {
+        color: #29a30e;
+        text-align: center;
+        &.disabled {
+            color: #cccccc;
+        }
+    }
 }
 </style>
