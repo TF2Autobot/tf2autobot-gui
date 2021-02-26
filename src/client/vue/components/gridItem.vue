@@ -42,6 +42,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$dark: #212529; //From bootstrap
 %unselectable {
     -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */
@@ -103,12 +104,14 @@ export default {
     left: 2px;
     position: absolute;
     z-index: 2;
+    color: $dark;
 }
 .intent-symbol {
     top: 2px;
     left: 2px;
     position: absolute;
     z-index: 2;
+    color: $dark;
     @extend %unselectable;
 }
 </style>
