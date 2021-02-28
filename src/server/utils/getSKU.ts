@@ -1,4 +1,4 @@
-import { wear, wears, quality, qualities, effect, effects, killstreak, killstreaks, skin, skins } from '../lib/data';
+import { wear, wears, quality, qualities, effect, effects, killstreak, killstreaks, skin, skins } from '../data';
 import SKU from 'tf2-sku-2';
 import fixItem from '../utils/fixItem';
 

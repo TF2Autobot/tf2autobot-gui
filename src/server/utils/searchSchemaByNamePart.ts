@@ -1,4 +1,4 @@
-import { wear, wears, quality, qualities, effect, effects, killstreak, killstreaks, skin, skins, qualityColors } from '../lib/data';
+import { wear, wears, quality, qualities, effect, effects, killstreak, killstreaks, skin, skins, qualityColors } from '../data';
 import fixItem from './fixItem';
 import getName from './getName';
 import SKU from 'tf2-sku-2';
@@ -17,7 +17,7 @@ export = function(search: string, maxResults: number, schema: SchemaManager.Sche
 		return matches;
 	}
 
-	if (item.defindex !== null) { // item is war paint
+	if (item.defindex) { // item is war paint
 		matches.push( createMatch(item, schema.getItemByDefindex(item.defindex), schema) );
 		return matches;
 	}

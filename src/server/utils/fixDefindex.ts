@@ -1,4 +1,4 @@
-import { defindexes } from '../lib/data';
+import { defindexes } from '../data';
 import SchemaManager, {SchemaItem} from "tf2-schema-2";
 
 export = function(itemInfo, schema: SchemaManager.Schema) {

@@ -1,4 +1,4 @@
-import * as data from '../lib/data';
+import * as data from '../data';
 import SKU from 'tf2-sku-2';
 import { Item } from '../types/TeamFortress2';
 import SchemaManager from "tf2-schema-2";

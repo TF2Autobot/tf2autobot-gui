@@ -1,5 +1,5 @@
 import SKU from 'tf2-sku-2';
-import { qualityColors, paintCanColors } from '../lib/data';
+import { qualityColors, paintCanColors } from '../data';
 import SchemaManager from "tf2-schema-2";
 
 /**
