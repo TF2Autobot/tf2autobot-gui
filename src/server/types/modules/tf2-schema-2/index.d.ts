@@ -42,6 +42,14 @@ declare module 'tf2-schema-2' {
     }
 
     namespace SchemaManager {
+        interface Qualities {
+            [type: string]: number;
+        }
+
+        interface QualityNames {
+            [typeDev: string]: string;
+        }
+
         interface SchemaAttribute {
             name: string;
             defindex: number;
@@ -209,6 +217,8 @@ declare module 'tf2-schema-2' {
             raw: {
                 schema: {
                     items_game_url: string;
+                    qualities: Qualities;
+                    qualityNames: QualityNames;
                     attributes: SchemaAttribute[];
                     item_sets: ItemSet[];
                     attribute_controlled_attached_particles: SchemaAttributeControlledAttachedParticle[];
