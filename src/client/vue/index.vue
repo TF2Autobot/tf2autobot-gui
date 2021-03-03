@@ -3,8 +3,8 @@
         <!-- <button type="button" data-bs-toggle="modal" data-bs-target="#test">Launch modal</button> -->
         <message v-for="(msg, index) in this.messages" :key="index" :to-remove=index :msg_type=msg.type @close="msgClose">{{msg.msg}}</message>
         <bulk-add ref="bulkAdd" :reloadItems="loadItems" @message="this.addMessage"></bulk-add>
-        <price-modal></price-modal>
-        <button @click="$refs.bulkAdd.show()"></button>
+        <price-modal ref="priceModal"></price-modal>
+        <button @click="$refs.priceModal.show()"></button>
         <item-grid v-if="grid" :pricelist="pricelist" :filter="filterPricelist" :multi-select="[]"></item-grid>
         <item-list v-else :pricelist="pricelist" :filter="filterPricelist" :multi-select="[]"></item-list>
     </div>
@@ -36,7 +36,7 @@ export default {
             messages: [] as Message[],
             items: [] as PricelistItem[],
             pricelist: [] as Pricelist,
-            grid: true,
+            grid: false,
         }
     },
     methods: {

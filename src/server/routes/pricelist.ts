@@ -34,5 +34,14 @@ export = function (schemaManager: SchemaManager): Router {
             pricelist
         });
     });
+    router.post('/', (req, res)=>{
+
+    });
+    router.patch('/', (req, res)=>{
+
+    });
+    router.delete('/', (req, res)=>{
+
+    });
     return router;
 }

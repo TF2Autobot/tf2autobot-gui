@@ -7,11 +7,9 @@
             </div>
             <div class="form-row">
                 <div class="col">
-                    <div class="pretty p-switch p-fill">
-                        <input type="checkbox" id="autoprice" name="autoprice" v-model="autoprice"/>
-                        <div class="state p-success">
-                            <label for="autoprice">Autoprice</label>
-                        </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="autoprice" id="autoprice" v-model="autoprice"/>
+                        <label class="form-check-label" for="autoprice">Autoprice</label>
                     </div>
                 </div>
             </div>
@@ -86,6 +84,7 @@ export default {
         }
     },
     props: ['reloadItems'],
+    emits: ['message'],
     methods: {
         show: function(){
             this.modal.show();
@@ -104,7 +103,7 @@ export default {
             };
             this.$emit('message',{msg: 'Bulk add started, it might take a while.', type:'secondary'});
             this.modal.hide();
-            fetch('/pricelist/add', { //TODO: IMPLEMENT BACKEND
+            fetch('/pricelist', { //TODO: IMPLEMENT BACKEND
                 method: 'POST',
                 body: JSON.stringify(postData),
                 headers: {
@@ -122,8 +121,6 @@ export default {
         },
     },
     mounted(){
-        console.log('mounted')
-
         // @ts-ignore
         this.modal = new bootstrap.Modal(document.getElementById('bulkModal'));
     },
@@ -132,5 +129,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '~pretty-checkbox/src/pretty-checkbox.scss';
 </style>

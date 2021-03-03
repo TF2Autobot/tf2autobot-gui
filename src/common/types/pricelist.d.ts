@@ -15,11 +15,11 @@ export interface PricelistItem {
         border_color: string;
         killstreak: string;
     };
-    "promoted": 0,
-    "group": "all",
-    "note": {
-        "buy": null,
-        "sell": null
+    promoted: boolean;
+    group: string;
+    note: {
+        buy: null,
+        sell: null
     },
     enabled: boolean;
     intent: number;

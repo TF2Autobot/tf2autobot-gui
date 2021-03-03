@@ -10,6 +10,7 @@
 
 <script lang="ts">
 export default {
+    emits: ['close'],
     props: {
         toRemove: Number,
         msg_type: String
