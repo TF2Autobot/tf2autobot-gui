@@ -72,3 +72,8 @@ process
         console.log(p);
         console.log('Please report this @ https://github.com/TF2Autobot/tf2autobot-gui/issues/new');
     });
+
+import BotConnectionManager from "./IPC";
+
+const botConnectionManager = new BotConnectionManager();
+botConnectionManager.init();

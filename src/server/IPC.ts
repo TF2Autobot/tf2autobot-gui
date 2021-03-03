@@ -1,6 +1,6 @@
 import { IPC } from 'node-ipc';
 
-export default class botConnectionManager extends IPC {
+export default class BotConnectionManager extends IPC {
     private botSockets: Map<string, any>;
 
     constructor() {
