@@ -15,4 +15,10 @@ This project is open source and thus it takes more time to fix bugs, please be p
 For contributing, please use eslint for linting, it makes code more readable and usable.
 Your PR can be closed if you don't follow this rule.
 
+#compile
+1. `npm run build-front`
+2. `npm run build-back`
+You can add `-watch` to run watch mode
 
+#start 
+`node dist/server`
