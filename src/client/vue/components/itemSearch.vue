@@ -17,15 +17,22 @@
 </template>
 
 <script lang="ts">
+
+interface data {
+    searchFocus: boolean;
+    searchDisable: boolean;
+    itemSearch: any[];
+}
+
 export default {
     name: "modelValue ",
     props: ['modelValue', 'id', 'disable'],
     emits: ['update:modelValue', 'item'],
-    data() {
+    data(): data {
         return {
             searchFocus: false,
             searchDisable: false,
-            itemSearch: false,
+            itemSearch: [],
         }
     },
     computed: {
@@ -33,13 +40,13 @@ export default {
             get() {
                 return this.modelValue
             },
-            set(value) {
+            set(value: string) {
                 this.$emit('update:modelValue', value)
             }
         }
     },
     watch: {
-        name(newName, oldName) {
+        name(newName: string, oldName: string) {
             console.log('name: ' + this.name)
             this.searchDisable = false;
             if (newName.trim() !== oldName.trim() && newName.trim() !== '') {
@@ -54,12 +61,12 @@ export default {
                         this.itemSearch = 'Search failed failed'
                     })
             } else if (newName.trim() === '') {
-                this.itemSearch = false;
+                this.itemSearch = [];
             }
         }
     },
     methods: {
-        searchClick(item) {
+        searchClick(item: object) {
             this.$emit('item', item);
             this.searchDisable = true;
         }

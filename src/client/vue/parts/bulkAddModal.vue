@@ -61,11 +61,28 @@
 
 <script lang="ts">
 import modal from '../components/modal.vue'
+interface data {
+    input: string;
+    autoprice: boolean;
+    intent: number;
+    buy: {
+        metal: number;
+        keys: number;
+    },
+    sell: {
+        metal: number;
+        keys: number;
+    },
+    max: number;
+    min: number;
+    modal: bootstrap.Modal
+}
+
 export default {
     components: {
         modal,
     },
-    data () {
+    data (): data {
         return {
             input: '',
             autoprice: true,

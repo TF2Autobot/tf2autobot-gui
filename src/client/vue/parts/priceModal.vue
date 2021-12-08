@@ -75,14 +75,18 @@
 import itemSearch from "../components/itemSearch.vue";
 import modal from '../components/modal.vue'
 import {Price, PricelistItem} from "../../../common/types/pricelist";
-
+interface data {
+    edit: boolean;
+    item: PricelistItem;
+    modal: bootstrap.Modal;
+}
 export default {
     components: {
         modal,
         itemSearch
     },
     props: ['reloadItems'],
-    data() {
+    data(): data {
         return {
             edit: false,
             item: {} as PricelistItem,
@@ -90,7 +94,7 @@ export default {
         }
     },
     methods: {
-        itemSelected(e) {
+        itemSelected(e: any) {
             this.item.sku = e.sku;
             this.item.name = e.name;
         },
