@@ -1,11 +1,11 @@
 import express, {Router} from 'express';
-import getStatsLink from "../utils/getStatsLink";
+import getStatsLink from "../../utils/getStatsLink";
 import Currency from "tf2-currencies-2";
-import {getImageStyle} from "../utils/getImage";
-import {Pricelist} from "../../common/types/pricelist";
+import {getImageStyle} from "../../utils/getImage";
+import {Pricelist} from "../../../common/types/pricelist";
 import SchemaManager from "tf2-schema-2";
 import SKU from 'tf2-sku-2';
-import paths from '../config/paths';
+import paths from '../../config/paths';
 import fs from "fs-extra";
 
 export = function (schemaManager: SchemaManager): Router {

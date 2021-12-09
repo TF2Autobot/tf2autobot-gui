@@ -1,10 +1,10 @@
 import express from 'express';
 const router = express.Router();
-import pricelist from '../app/pricelist';
+import * as pricelist from '../app/pricelist';
 
 router.post('/', async (req, res) => {
 	const items = req.body.list;
-	
+
 	pricelist
 		.removeItems(items)
 		.then((removed) => {

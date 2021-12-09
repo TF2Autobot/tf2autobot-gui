@@ -6,11 +6,7 @@ import getSKU from '../utils/getSKU';
 import getName from '../utils/getName';
 import paths from '../config/paths';
 
-
-const pricelist = module.exports;
- 
-
-pricelist.addItems = async function(search, options) {
+export async function addItems(search, options, schema) {
 	let skus = [];
 	const items = [];
 	let itemsFailed = 0;
@@ -45,7 +41,7 @@ pricelist.addItems = async function(search, options) {
 			}
 		}
 
-		const generatedSkus = search.map((item) => getSKU(item));
+		const generatedSkus = search.map((item) => getSKU(item, schema));
 		skus = skus.concat(generatedSkus);
 
 		for (let i = 0; i < skus.length; i++) {
@@ -58,12 +54,12 @@ pricelist.addItems = async function(search, options) {
 
 		for (let i = 0; i < items.length; i++) {
 			const { sku, name, buy, sell, time } = prices[i];
-			
+
 			if (skus.indexOf(sku) > -1) {
 				if (buy === null || sell === null) {
 					continue;
 				}
-				
+
 				const listing = {
 					sku,
 					enabled: true,
@@ -83,7 +79,7 @@ pricelist.addItems = async function(search, options) {
 			}
 		}
 	} else {
-		const skus = search.map((item) => getSKU(item));
+		const skus = search.map((item) => getSKU(item, schema));
 		for (let i = 0; i < skus.length; i++) {
 			const sku = skus[i];
 			if (sku === false) {
@@ -110,8 +106,8 @@ pricelist.addItems = async function(search, options) {
 			}
 		}
 	}
-	itemsFailed += skus.length; // items that succeeded get removed from skus 
-	failedItems = skus.map((sku) => getName(sku)); // so all thats left in skus is failed items. 
+	itemsFailed += skus.length; // items that succeeded get removed from skus
+	failedItems = skus.map((sku) => getName(sku, schema)); // so all thats left in skus is failed items.
 
 	if (itemsAdded > 0) {
 		try {
@@ -131,7 +127,7 @@ pricelist.addItems = async function(search, options) {
 			return Promise.reject(err);
 		}
 	}
-	
+
 	return {
 		itemsAdded: itemsAdded,
 		itemsFailed: itemsFailed,
@@ -139,13 +135,13 @@ pricelist.addItems = async function(search, options) {
 	};
 };
 
-pricelist.addSingleItem = function(search, { autoprice, max, min, intent, buy, sell }) {
-	const sku = getSKU(search);
-	
+export function addSingleItem(schema, search, { autoprice, max, min, intent, buy, sell }) {
+	const sku = getSKU(search, schema);
+
 	if (sku === null) return Promise.resolve(false);
 
 	const item = {
-		name: getName(SKU.fromString(sku)),
+		name: getName(SKU.fromString(sku), schema),
 		sku: sku,
 		enabled: true,
 		time: 0,
@@ -165,7 +161,7 @@ pricelist.addSingleItem = function(search, { autoprice, max, min, intent, buy, s
 	return addItemsToPricelist([item]);
 };
 
-pricelist.changeSingleItem = function(item) {
+export function changeSingleItem(item) {
 	return fs.readJSON(paths.files.pricelist)
 		.then((pricelist) => {
 			pricelist.forEach((pricedItem) => {
@@ -185,7 +181,7 @@ pricelist.changeSingleItem = function(item) {
 		});
 };
 
-pricelist.removeItems = async function(items) {
+export async function removeItems(items) {
 	if (!items || items.length == 0) {
 		return false;
 	}
@@ -261,7 +257,7 @@ function removeItemsFromPricelist(items) {
 		});
 }
 
-pricelist.clear = function() {
+export function clear() {
 	return fs.writeJSON(paths.files.pricelist, []);
 };
 

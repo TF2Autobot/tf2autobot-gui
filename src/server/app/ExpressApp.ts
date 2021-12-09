@@ -20,13 +20,13 @@ if (isNaN(+port)) {
 // Maybe just require in the app.use instead of vars
 import index from '../routes';
 import removeItems from '../routesOld/removeItems';
-import addItem from '../routesOld/addItem';
-import addItems from '../routesOld/addItems';
-import trades from '../routesOld/trades';
+import addItem from '../routes/addItem';
+//import addItems from '../routesOld/addItems';
+import trades from '../routes/trades';
 import changeItem from '../routesOld/changeItem';
 import clearPricelist from '../routesOld/clearPricelist';
-import search from '../routesOld/search';
-import getItems from '../routesOld/getItems';
+//import search from '../routesOld/search';
+import getItems from '../routes/getItems';
 import profit from '../routesOld/profit';
 import autoprice from '../routesOld/autoprice';
 import authRoutes from '../routes/auth';
@@ -104,10 +104,10 @@ app
 	.use('/removeItems', removeItems)
 	.use('/clearPricelist', clearPricelist)
 	.use('/addItem', addItem)
-	.use('/addItems', addItems)
+	//.use('/addItems', addItems)
 	.use('/trades', trades)
 	.use('/changeItem', changeItem)
-	.use('/search', search)
+	//.use('/search', search)
 	.use('/getItems', getItems)
 	.use('/profit', profit)
 	.use('/autoprice', autoprice)

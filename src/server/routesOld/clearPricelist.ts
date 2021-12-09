@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import pricelist from '../app/pricelist';
+import * as pricelist from '../app/pricelist';
 
 router.post('/', (req, res) => {
 	pricelist

@@ -1,18 +1,25 @@
-import { IPC } from 'node-ipc';
+//import { IPC } from 'node-ipc';
+const {IPCModule} = require('node-ipc');
 
-export default class BotConnectionManager extends IPC {
+export default class BotConnectionManager {
     private botSockets: Map<string, any>;
 
+    private initiated: boolean;
+
+    private ipc: typeof IPCModule;
+
     constructor() {
-        super();
+        this.ipc = new IPCModule;
         this.botSockets = new Map();
+        this.initiated = false;
     }
 
     init() {
-        this.config.id = 'autobot_gui_dev';
-        this.config.retry= 1500;
-        this.serve(()=>{
-            this.server.on(
+        this.ipc.config.id = 'autobot_gui_dev';
+        this.ipc.config.retry= 1500;
+        this.ipc.serve(()=>{
+            this.initiated = true;
+            this.ipc.server.on(
                 'info',
                 (data, socket)=>{
                     if(!this.botSockets.has(data.id)){
@@ -22,16 +29,16 @@ export default class BotConnectionManager extends IPC {
                     }
                 }
             );
-            this.server.on(
+            this.ipc.server.on(
                 'connect',
-                (socket)=>{
+                (socket)=>{/*
                     this.server.emit(
                         socket,
                         'getInfo'
-                    );
+                    );*/
                 }
             );
-            this.server.on(
+            this.ipc.server.on(
                 'socket.disconnected',
                 (socket)=>{
                     // @ts-ignore
@@ -39,6 +46,6 @@ export default class BotConnectionManager extends IPC {
                 }
             )
         });
-        this.server.start();
+        this.ipc.server.start();
     }
 }

@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import Currency from 'tf2-currencies-2';
-import pricelist from '../app/pricelist';
+import * as pricelist from '../app/pricelist';
 
 router.post('/', (req, res) => {
 	const { sku, intent, autoprice, min, max, sellkeys, sellmetal, buykeys, buymetal, enabled } = req.body;

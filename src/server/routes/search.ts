@@ -2,7 +2,7 @@ import express, {Router} from 'express';
 import searchSchemaByNamePart from '../utils/searchSchemaByNamePart';
 import SchemaManager from "tf2-schema-2";
 
-export = function (schemaManager: SchemaManager): Router {
+export = function(schemaManager: SchemaManager): Router {
 	const router = express.Router();
 	const schema = schemaManager.schema;
 	router.get('/', (req, res) => {

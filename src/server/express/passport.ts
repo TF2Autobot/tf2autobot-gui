@@ -30,7 +30,7 @@ export =  function init(app: Express): void {
             return done(null, profile);
         }
     ));
-    /*
+
     app.use(passport.initialize())
         .use(passport.session())
         .use((req, res, next) => {
@@ -45,5 +45,5 @@ export =  function init(app: Express): void {
                 return res.render('no', { user: req.user });
             }
             res.redirect('/auth/steam');
-        })*/
+        })
 }

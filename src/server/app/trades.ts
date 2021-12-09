@@ -1,20 +1,21 @@
 import fs from 'fs-extra';
 import paths from '../config/paths';
 import getName from '../utils/getName';
-import * as data from '../lib/data';
+import * as data from '../data';
 import dayjs from 'dayjs';
 import SKU from 'tf2-sku-2';
 import * as getImage from '../utils/getImage';
 import * as profit from './profit';
+import SchemaManager from "tf2-schema-2";
 
 /**
- * 
+ *
  * @param {Number} first index of first trade to be included in results
  * @param {Number} count how many trades to include in results, set to -1 to return all
  * @param {Boolean} descending sort
  * @param {String} search string to search listings for
  */
-export = async function(first: number, count: number, descending: boolean, search: string) {
+export async function get(first: number, count: number, descending: boolean, search: string, schema: SchemaManager.Schema) {
 	search = search.trim().toLowerCase();
 	const polldata = await fs.readJSON(paths.files.polldata);
 	const profitData = (await profit.get(undefined, undefined, undefined, true)).tradeProfits;
@@ -43,7 +44,7 @@ export = async function(first: number, count: number, descending: boolean, searc
 		let offerSearchResults = false;
 		if (Object.prototype.hasOwnProperty.call(offer, 'dict')) {
 			offerSearchResults = Object.keys(offer.dict.our).some(item => {
-				return getName(SKU.fromString(item)).toLowerCase().indexOf(search) > -1;
+				return getName(SKU.fromString(item), schema).toLowerCase().indexOf(search) > -1;
 			});
 		}
 		return offer.id.indexOf(search) > -1 || offerSearchResults;
@@ -86,12 +87,12 @@ export = async function(first: number, count: number, descending: boolean, searc
 
 		/**
 		 * Get items from one side of a trade
-		 * @param {'our'|'their'} side 
+		 * @param {'our'|'their'} side
 		 */
 		function tradeSide(side) {
 			Object.keys(offer.dict[side]).forEach((k) => {
 				if (!Object.prototype.hasOwnProperty.call(items, k)) {
-					items[k] = createTradeItem(k);
+					items[k] = createTradeItem(k, schema);
 				}
 				ret.items[side].push({
 					sku: k,
@@ -109,12 +110,13 @@ export = async function(first: number, count: number, descending: boolean, searc
 
 /**
  * Creates item object
- * @param {String} sku 
+ * @param {String} sku
+ * @param schema
  * @return {Object} item object created
  */
-function createTradeItem(sku) {
+function createTradeItem(sku, schema: SchemaManager.Schema) {
 	return {
-		name: getName(sku),
-		style: getImage.getImageStyle(sku)
+		name: getName(sku, schema),
+		style: getImage.getImageStyle(sku, schema)
 	};
 }
