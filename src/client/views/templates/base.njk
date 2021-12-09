@@ -5,7 +5,7 @@
     <title>{% block title %}TF2Autobot GUI{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     {{ load_entry_tags('base', 'css') | safe }}
-    {{ load_entry_tags('base', 'js') }}
+    {{ load_entry_tags('base', 'js') | safe}}
     {% block stylesheets %}{% endblock %}
 </head>
 <body>

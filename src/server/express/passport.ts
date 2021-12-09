@@ -1,8 +1,9 @@
 import passport from "passport";
 import StrategyPassport from 'passport-steam';
 import { Express } from "express";
+import BotConnectionManager from "../IPC";
 
-export =  function init(app: Express): void {
+export =  function init(app: Express, botManager: BotConnectionManager): void {
     let port = process.env.PORT ? process.env.PORT : 3000;
     let ip = process.env.ADDRESS;
 
@@ -33,12 +34,25 @@ export =  function init(app: Express): void {
 
     app.use(passport.initialize())
         .use(passport.session())
+        .post('/pickbot', (req,res)=>{
+            req.session.bot = req.body.bot;
+            res.redirect(301, '/');
+        })
+        .use((req, res, next) => {
+            if(req.user && !req.session.bot) {
+                res.render('pickBot', {bots: Object.values(botManager.bots)
+                        .filter(bot=>bot.admins.includes(req.user.id))
+                        .map(bot=>bot.id)});
+            } else {
+                next()
+            }
+        })
         .use((req, res, next) => {
             if (req.originalUrl.startsWith('/auth/steam')) { // Trying to log in, continue
                 return next();
             }
             if (req.user) { // Is logged in
-                if (true  || req.session.bot.admins.includes(req.user.id)) { // Is an admin, continue TODO: remove true
+                if (req.session.bot && botManager.bots[req.session.bot]?.admins?.includes(req.user.id)) { // Is an admin, continue TODO: remove true
                     return next();
                 }
                 res.status(401);
@@ -46,4 +60,5 @@ export =  function init(app: Express): void {
             }
             res.redirect('/auth/steam');
         })
+
 }

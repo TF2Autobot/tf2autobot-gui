@@ -1,0 +1,21 @@
+{% extends 'templates/base.njk' %}
+{% block stylesheets %}{% endblock %}
+{% block body %}
+{% if bots | length > 0 %}
+    {{ bots | dump }}
+    <form method="post" action="/pickbot">
+        <label for="bot-select">Pick bot</label>
+
+        <select name="bot" id="bot-select">
+            <option value="" disabled selected>--Please choose a bot--</option>
+
+            {% for id in bots %}
+                <option value="{{ id }}">{{ id }}</option>
+
+            {% endfor %}
+        </select>
+        <button type="submit">Pick</button>
+    </form>
+{% endif %}
+{% endblock %}
+{% block javascripts %}{% endblock %}

@@ -4,7 +4,7 @@ import {Pricelist, PricelistItem} from "../common/types/pricelist";
 const {IPCModule} = require('node-ipc');
 
 export default class BotConnectionManager {
-    private bots: { [id: string]: { socket: any, pricelistTS?: number, pricelist?: Pricelist, admins?: string[] } };
+    bots: { [id: string]: { socket: any, pricelistTS?: number, pricelist?: Pricelist, admins?: string[], id: string } };
 
     private initiated: boolean;
 
@@ -37,7 +37,7 @@ export default class BotConnectionManager {
     getBotPricelist(id: string) {
         return new Promise<undefined | Pricelist>((resolve, reject)=>{
             if(!this.bots[id]) reject("no bot found");
-            else if(this.bots[id].pricelistTS > Date.now() - 60*1000) {
+            else if(this.bots[id].pricelistTS > Date.now() - 15*1000) {
                 resolve(this.bots[id].pricelist);
             } else {
                 this.getPricelist(this.bots[id].socket, (data)=>{
@@ -98,7 +98,7 @@ export default class BotConnectionManager {
                     if (!this.bots[data.id]) {
                         console.log('bot id ' + data.id);
                         socket.id = data.id;
-                        this.bots[data.id] = {socket};
+                        this.bots[data.id] = {socket, ...data};
                     }
                 }
             );

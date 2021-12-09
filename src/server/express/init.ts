@@ -10,7 +10,7 @@ export = function init(app: Express, schemaManager: SchemaManager, botManager: B
     app.use(express.static('./public'))
     initBody(app);
     if(process.env.STEAM_AUTH) {
-        initPassport(app);
+        initPassport(app, botManager);
     }
     initNjs(app);
     initRoutes(app, schemaManager, botManager);
