@@ -8,8 +8,12 @@ import express from 'express';
 import initApp from './express/init';
 import SchemaManager from 'tf2-schema-2';
 import BotConnectionManager from "./IPC";
+import fs from "fs";
+import * as https from "https";
+import * as http from "http";
 // import {Bot} from "./Bot";
 const port = +process.env.PORT;
+const port_https = +process.env.PORT_HTTPS;
 
 console.log('tf2autobot-gui v' + require(path.join(process.cwd(), 'package.json')).version + ' is starting...');
 const app = express();
@@ -33,7 +37,13 @@ schemaManager.init(err => {
         console.log('Schema manager failed to init, with error: ' + err)
     } else {
         initApp(app, schemaManager, botConnectionManager);
-        app.listen(port);
+        const httpServer = http.createServer(app);
+        httpServer.listen(port);
+        if(process.env.SSL) {
+            const credentials = {key: fs.readFileSync('local.key', 'utf8'), cert: fs.readFileSync('local.crt', 'utf8')};
+            const httpsServer = https.createServer(credentials, app);
+            httpsServer.listen(port_https);
+        }
         console.log('server listening on port ' + port);
     }
 })
