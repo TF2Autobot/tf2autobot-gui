@@ -1,4 +1,6 @@
-export type Pricelist = PricelistItem[]
+export type Pricelist = {
+    [sku: string]: PricelistItem
+}
 
 export interface PricelistItem {
     sku: string

@@ -3,10 +3,10 @@
         <!-- <button type="button" data-bs-toggle="modal" data-bs-target="#test">Launch modal</button> -->
         <message v-for="(msg, index) in this.messages" :key="index" :to-remove=index :msg_type=msg.type @close="msgClose">{{msg.msg}}</message>
         <bulk-add ref="bulkAdd" :reloadItems="loadItems" @message="this.addMessage"></bulk-add>
-        <price-modal ref="priceModal"></price-modal>
-        <button @click="$refs.priceModal.show()"></button>
-        <item-grid v-if="grid" :pricelist="pricelist" :filter="filterPricelist" :multi-select="[]"></item-grid>
-        <item-list v-else :pricelist="pricelist" :filter="filterPricelist" :multi-select="[]"></item-list>
+        <price-modal ref="priceModal" @item="itemUpdate($event)"></price-modal>
+        <button @click="$refs.priceModal.show()">Add Item</button>
+        <item-grid v-if="grid" :pricelist="pricelist" :filter="filterPricelist" :multi-select="[]" @itemClick="$refs.priceModal.show(true, $event)"></item-grid>
+        <item-list v-else :pricelist="pricelist" :filter="filterPricelist" :multi-select="[]" @itemClick="$refs.priceModal.show(true, $event)"></item-list>
     </div>
 </template>
 
@@ -35,7 +35,7 @@ export default {
         return {
             messages: [] as Message[],
             items: [] as PricelistItem[],
-            pricelist: [] as Pricelist,
+            pricelist: {} as Pricelist,
             grid: false,
         }
     },
@@ -52,7 +52,7 @@ export default {
                     return response.json();
                 })
                 .then((data) => {
-                    this.pricelist = data.pricelist;
+                    this.pricelist = data;
                 })
                 .catch((error) => {
                     console.error('Error: ', error);
@@ -60,6 +60,10 @@ export default {
         },
         addMessage(msg: Message) {
             this.messages.push(msg);
+        },
+        itemUpdate(item: {type: string, data: PricelistItem}){
+            if(item.type === 'del') this.pricelist.findIndex((e: PricelistItem) => e.sku === item.data.sku);
+            else this.pricelist.push(item.data);
         }
     },
     created() {

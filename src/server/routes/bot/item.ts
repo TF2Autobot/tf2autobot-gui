@@ -4,13 +4,12 @@ import express, {Router} from 'express';
 import SchemaManager from "tf2-schema-2";
 import Currency from "tf2-currencies-2";
 import {PricelistItem} from "../../../common/types/pricelist";
+import BotConnectionManager from "../../IPC";
+import processPricelistItem from "../../utils/processPricelistItem";
 
-export = function (schemaManager: SchemaManager): Router {
+export = function (schemaManager: SchemaManager, botManager: BotConnectionManager): Router {
     const router = express.Router();
     const schema = schemaManager.schema;
-    router.get('/', (res,req)=>{
-
-    });
     router.post('/', (req,res)=>{
         const item = req.body as PricelistItem;
         if (!item.autoprice) {
@@ -46,6 +45,14 @@ export = function (schemaManager: SchemaManager): Router {
                 metal: 0
             };
         }
+        botManager.addItem("76561198295307456" ,item)
+            .then(r => {
+                if(typeof r === 'object') {
+                    res.json( processPricelistItem(r, schema));
+                } else {
+                    res.json(r)
+                }
+            });
     });
     router.patch('/', (res,req)=>{
 

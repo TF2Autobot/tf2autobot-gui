@@ -1,10 +1,10 @@
 //import { IPC } from 'node-ipc';
-import {Pricelist} from "../common/types/pricelist";
+import {Pricelist, PricelistItem} from "../common/types/pricelist";
 
 const {IPCModule} = require('node-ipc');
 
 export default class BotConnectionManager {
-    private bots: { [id: string]: { socket: any, pricelist?: Pricelist, admins?: string[] } };
+    private bots: { [id: string]: { socket: any, pricelistTS?: number, pricelist?: Pricelist, admins?: string[] } };
 
     private initiated: boolean;
 
@@ -15,17 +15,49 @@ export default class BotConnectionManager {
         this.bots = {};
         this.initiated = false;
     }
-    getPricelist(socket) {
+
+    private getPricelist(socket, callback?) {
         this.ipc.server.emit(
             socket,
             'getPricelist'
         );
+        if(callback){
+            this.ipc.server.once('pricelist', callback);
+        }
     }
-    getInfo(socket) {
+    private getInfo(socket, callback?) {
         this.ipc.server.emit(
             socket,
             'getInfo'
         );
+        if(callback){
+            this.ipc.server.once('info', callback);
+        }
+    }
+    getBotPricelist(id: string) {
+        return new Promise<undefined | Pricelist>((resolve, reject)=>{
+            if(!this.bots[id]) reject("no bot found");
+            else if(this.bots[id].pricelistTS > Date.now() - 60*1000) {
+                resolve(this.bots[id].pricelist);
+            } else {
+                this.getPricelist(this.bots[id].socket, (data)=>{
+                    resolve(data);
+                });
+            }
+        });
+    }
+    addItem(id: string, item: object) {
+        return new Promise<undefined | PricelistItem>((resolve, reject)=>{
+            if(!this.bots[id]) reject("no bot found");
+            else {
+                this.ipc.server.emit(
+                    this.bots[id].socket,
+                    'addItem',
+                    item
+                );
+                this.ipc.server.once('itemAdded', resolve);
+            }
+        });
     }
     init() {
         this.ipc.config.id = 'autobot_gui_dev';
@@ -53,6 +85,7 @@ export default class BotConnectionManager {
                         console.log('NEW PRICELiST');
                         console.log(data);
                         this.bots[socket.id]['pricelist'] = data;
+                        this.bots[socket.id]["pricelistTS"] = Date.now();
                     }
                 }
             );

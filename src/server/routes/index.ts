@@ -12,8 +12,9 @@ import addItems from './addItems';
 import search from './search';
 import bot from './bot';
 import SchemaManager from "tf2-schema-2";
+import BotConnectionManager from "../IPC";
 
-export = function init(schemaManager: SchemaManager) : Router {
+export = function init(schemaManager: SchemaManager, botManager: BotConnectionManager) : Router {
 	const router = express.Router();
 	router
 		.get('/', (req, res) => {
@@ -30,6 +31,6 @@ export = function init(schemaManager: SchemaManager) : Router {
 		.use('/profit', profit(schemaManager))
 		.use('/autoprice', autoprice)
 		.use('/auth', authRoutes)
-		.use(bot(schemaManager));
+		.use(bot(schemaManager, botManager));
 	return router;
 }

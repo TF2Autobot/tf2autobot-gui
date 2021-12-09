@@ -1,7 +1,7 @@
 <template>
     <div class="item m-1"
          :style="{ backgroundImage: `url( ${item.style.image_small} ), url( ${item.style.effect} )`, backgroundColor: item.style.quality_color, borderStyle: item.style.craftable? false : 'dashed', opacity: item.enabled?1:0.5, borderColor: item.style.border_color}"
-         @click="itemClick(item, $event)">
+         @click="$emit('itemClick', item)">
         <div class="info text-center font-weight-bold" v-if="!selected">
             {{item.name}}
         </div>
@@ -37,7 +37,8 @@ export default {
     props: {
         item: Object,
         selected: Boolean
-    }
+    },
+    emits: ['itemClick']
 }
 </script>
 

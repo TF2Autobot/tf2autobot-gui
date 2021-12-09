@@ -1,40 +1,28 @@
 import express, {Router} from 'express';
-import getStatsLink from "../../utils/getStatsLink";
-import Currency from "tf2-currencies-2";
-import {getImageStyle} from "../../utils/getImage";
-import {Pricelist} from "../../../common/types/pricelist";
 import SchemaManager from "tf2-schema-2";
-import SKU from 'tf2-sku-2';
-import paths from '../../config/paths';
-import fs from "fs-extra";
 import BotConnectionManager from "../../IPC";
+import processPricelistItem from '../../utils/processPricelistItem';
 
 export = function (schemaManager: SchemaManager, botManager: BotConnectionManager): Router {
     const router = express.Router();
     const schema = schemaManager.schema;
-    router.get('/', (req, res) => {
+    router.get('/', async (req, res) => {
         //botManager
-        const pricelist = fs.readJSONSync(paths.files.pricelist) as Pricelist; //TODO fetch from bot
-        const keyPrice = 56; //TODO fetch from bot
+        let pricelist
+        try {
+            pricelist = await botManager.getBotPricelist("76561198295307456");// fs.readJSONSync(paths.files.pricelist) as Pricelist; //TODO fetch from bot
+        } catch (e) {
+            console.error(e);
+        }
+        if(!pricelist) res.json([]);
+        pricelist = Object.values(pricelist);
         for (let i = 0; i < pricelist.length; i++) {
             const item = pricelist[i];
-            if (!item.name) {
-                item.name = schema.getName(SKU.fromString(item.sku));
-            }
-            item.statslink = getStatsLink(item.sku, schema);
-            [item.buy, item.sell].forEach((prices)=>{
-                const currency = new Currency({
-                    metal: prices.metal,
-                    keys: prices.keys
-                })
-                prices.total = currency.toValue(keyPrice);
-                prices.string = currency.toString();
-            });
-            item.style = getImageStyle(item.sku, schema);
+            pricelist[i] = processPricelistItem(item, schema);
         }
-        res.json({
+        res.json(
             pricelist
-        });
+        );
     });
     router.post('/', (req, res)=>{
 

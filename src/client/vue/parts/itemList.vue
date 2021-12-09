@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="item-list m-1" v-for="item in filtered" :key="item.sku" @click="itemClick(item, $event)">
+            <tr class="item-list m-1" v-for="item in filtered" :key="item.sku" @click="$emit('itemClick',item)">
                 <td>
                     <a :href="item.statslink" target="_blank" v-on:click.stop="">{{item.sku}}</a>
                 </td>
@@ -55,9 +55,12 @@
 
 <script lang="ts">
 import item from '../components/gridItem.vue'
+import {Pricelist} from "../../../common/types/pricelist";
+import { PropType } from 'vue';
 export default {
+    emits: ['itemClick'],
     props: {
-        pricelist: Array,
+        pricelist: Object as PropType<Pricelist>,
         filter: Function,
         multiSelect: Array
     },
@@ -66,9 +69,14 @@ export default {
         item
     },
     computed: {
-        filtered() {
-            return this.pricelist.filter(this.filter);
+        filtered () {
+            console.log(this.pricelist);
+            // @ts-ignore
+            return this.pricelist ? Object.values(this.pricelist).filter(this.filter) : [];
         }
+    },
+    created() {
+        console.log(this);
     }
 }
 </script>

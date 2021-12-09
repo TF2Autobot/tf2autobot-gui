@@ -86,6 +86,7 @@ export default {
         modal,
         itemSearch
     },
+    emits: ['item'],
     props: ['reloadItems'],
     data(): data {
         return {
@@ -151,7 +152,14 @@ export default {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            })
+            })  .then(res => res.json())
+                .then(res => {
+                    if(typeof res === "object") {
+                        this.$emit('item', {type: 'new', data: res});
+                    } else {
+                        console.error(res);
+                    }
+                })
                 .catch((error) => {
                     console.error('Error: ', error);
                 });
@@ -165,7 +173,14 @@ export default {
                 headers: {
                     'Content-Type': 'application/json',
                 }
-            })
+            })  .then(res => res.json())
+                .then(res => {
+                    if(typeof res === "object") {
+                        this.$emit('item', {type: 'new', data: res});
+                    } else {
+                        console.error(res);
+                    }
+                })
                 .catch((error) => {
                     console.error('Error: ', error);
                 });
