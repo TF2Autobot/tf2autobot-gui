@@ -53,12 +53,24 @@
                     </select>
                 </div>
                 <div class="col">
-                    <label>Minimum stock</label>
+                    <label for="priceminimum">Minimum stock</label>
                     <input type="number" class="form-control" id="priceminimum" name="min" min="0" required v-model="item.min">
                 </div>
                 <div class="col">
-                    <label>Maximum stock</label>
+                    <label for="pricemaximum">Maximum stock</label>
                     <input type="number" class="form-control" id="pricemaximum" name="max" min="0" required v-model="item.max">
+                </div>
+            </div>
+            <div class="row" v-if="item.enabled &&(item.intent!==1)">
+                <div class="col">
+                    <label for="buynote">Buy Note</label>
+                    <input type="text" name="buynote" id="buynote" v-model="item.note.buy">
+                </div>
+            </div>
+            <div class="row" v-if="item.enabled &&(item.intent!==0)">
+                <div class="col">
+                    <label for="sellnote">Sell Note</label>
+                    <input type="text" name="buynote" id="sellnote" v-model="item.note.sell">
                 </div>
             </div>
         </template>
@@ -106,6 +118,7 @@ export default {
             if(edit) {
                 if(item) {
                     this.item = item;
+                    console.log(JSON.parse(JSON.stringify(item)));
                 } else {
                     this.edit = false; // we have no item to edit
                 }
@@ -155,7 +168,7 @@ export default {
             })  .then(res => res.json())
                 .then(res => {
                     if(typeof res === "object") {
-                        this.$emit('item', {type: 'new', data: res});
+                        this.$emit('item', {type: this.edit? 'patch':'new', data: res});
                     } else {
                         console.error(res);
                     }
@@ -169,14 +182,14 @@ export default {
             this.hide();
             fetch('/pricelist/item', { //TODO: IMPLEMENT BACKEND
                 method: 'DELETE',
-                body: JSON.stringify(this.item),
+                body: JSON.stringify({sku: this.item.sku}),
                 headers: {
                     'Content-Type': 'application/json',
                 }
             })  .then(res => res.json())
                 .then(res => {
                     if(typeof res === "object") {
-                        this.$emit('item', {type: 'new', data: res});
+                        this.$emit('item', {type: 'del', data: res});
                     } else {
                         console.error(res);
                     }

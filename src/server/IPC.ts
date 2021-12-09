@@ -59,6 +59,32 @@ export default class BotConnectionManager {
             }
         });
     }
+    updateItem(id: string, item: object) {
+        return new Promise<undefined | PricelistItem>((resolve, reject)=>{
+            if(!this.bots[id]) reject("no bot found");
+            else {
+                this.ipc.server.emit(
+                    this.bots[id].socket,
+                    'updateItem',
+                    item
+                );
+                this.ipc.server.once('itemUpdated', resolve);
+            }
+        });
+    }
+    removeItem(id: string, sku: string) {
+        return new Promise<undefined | PricelistItem>((resolve, reject)=>{
+            if(!this.bots[id]) reject("no bot found");
+            else {
+                this.ipc.server.emit(
+                    this.bots[id].socket,
+                    'removeItem',
+                    sku
+                );
+                this.ipc.server.once('itemRemoved', resolve);
+            }
+        });
+    }
     init() {
         this.ipc.config.id = 'autobot_gui_dev';
         this.ipc.config.retry = 1500;

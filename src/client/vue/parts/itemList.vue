@@ -70,7 +70,6 @@ export default {
     },
     computed: {
         filtered () {
-            console.log(this.pricelist);
             // @ts-ignore
             return this.pricelist ? Object.values(this.pricelist).filter(this.filter) : [];
         }

@@ -62,7 +62,8 @@ export default {
             this.messages.push(msg);
         },
         itemUpdate(item: {type: string, data: PricelistItem}){
-            if(item.type === 'del') this.pricelist.findIndex((e: PricelistItem) => e.sku === item.data.sku);
+            if(item.type === 'del') this.pricelist.splice(this.pricelist.findIndex((e: PricelistItem) => e.sku === item.data.sku), 1);
+            else if(item.type === 'patch') this.pricelist[this.pricelist.findIndex((e: PricelistItem) => e.sku === item.data.sku)] = this.item.data;
             else this.pricelist.push(item.data);
         }
     },

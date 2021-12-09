@@ -10,7 +10,7 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
         //botManager
         let pricelist
         try {
-            pricelist = await botManager.getBotPricelist("76561198295307456");// fs.readJSONSync(paths.files.pricelist) as Pricelist; //TODO fetch from bot
+            pricelist = await botManager.getBotPricelist(process.env.BOT_ID);// fs.readJSONSync(paths.files.pricelist) as Pricelist; //TODO fetch from bot
         } catch (e) {
             console.error(e);
         }
@@ -23,15 +23,6 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
         res.json(
             pricelist
         );
-    });
-    router.post('/', (req, res)=>{
-
-    });
-    router.patch('/', (req, res)=>{
-
-    });
-    router.delete('/', (req, res)=>{
-
     });
     return router;
 }
