@@ -1,6 +1,4 @@
 node_modules/*
-views/*
-config/*
 *.bat
 *.md
 *.txt
@@ -11,3 +9,6 @@ package-lock.json
 *.min.js
 mdDateTimePicker.js
 scroll-into-view-if-needed.js
+
+dist
+public

@@ -17,6 +17,7 @@
     "strictNullChecks": false,
     "forceConsistentCasingInFileNames": true,
     "typeRoots": ["./types/modules",
+      "../common/types/modules",
       "../../node_modules/@types"
     ]
   },

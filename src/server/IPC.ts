@@ -1,8 +1,10 @@
 //import { IPC } from 'node-ipc';
+import {Pricelist} from "../common/types/pricelist";
+
 const {IPCModule} = require('node-ipc');
 
 export default class BotConnectionManager {
-    private botSockets: Map<string, any>;
+    private bots: { [id: string]: { socket: any, pricelist?: Pricelist, admins?: string[] } };
 
     private initiated: boolean;
 
@@ -10,39 +12,60 @@ export default class BotConnectionManager {
 
     constructor() {
         this.ipc = new IPCModule;
-        this.botSockets = new Map();
+        this.bots = {};
         this.initiated = false;
     }
-
+    getPricelist(socket) {
+        this.ipc.server.emit(
+            socket,
+            'getPricelist'
+        );
+    }
+    getInfo(socket) {
+        this.ipc.server.emit(
+            socket,
+            'getInfo'
+        );
+    }
     init() {
         this.ipc.config.id = 'autobot_gui_dev';
-        this.ipc.config.retry= 1500;
-        this.ipc.serve(()=>{
+        this.ipc.config.retry = 1500;
+        this.ipc.config.logger = console.debug;
+        this.ipc.config.silent = process.env.NODE_ENV === 'production';
+        this.ipc.serve(() => {
             this.initiated = true;
             this.ipc.server.on(
                 'info',
-                (data, socket)=>{
-                    if(!this.botSockets.has(data.id)){
+                (data, socket) => {
+                    if (!this.bots[data.id]) {
                         console.log('bot id ' + data.id);
                         socket.id = data.id;
-                        this.botSockets.set(data, socket);
+                        this.bots[data.id] = {socket};
+                    }
+                }
+            );
+            this.ipc.server.on(
+                'pricelist',
+                (data, socket) => {
+                    if(!data) {
+                        setTimeout(() => this.getPricelist(socket), 3000);
+                    } else {
+                        console.log('NEW PRICELiST');
+                        console.log(data);
+                        this.bots[socket.id]['pricelist'] = data;
                     }
                 }
             );
             this.ipc.server.on(
                 'connect',
-                (socket)=>{/*
-                    this.server.emit(
-                        socket,
-                        'getInfo'
-                    );*/
+                (socket) => {
+                    this.getInfo(socket);
                 }
             );
             this.ipc.server.on(
                 'socket.disconnected',
-                (socket)=>{
-                    // @ts-ignore
-                    this.botSockets.delete(socket.id);
+                (socket) => {
+                    delete this.bots[socket.id];
                 }
             )
         });

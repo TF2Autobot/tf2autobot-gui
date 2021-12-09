@@ -75,6 +75,7 @@
 import itemSearch from "../components/itemSearch.vue";
 import modal from '../components/modal.vue'
 import {Price, PricelistItem} from "../../../common/types/pricelist";
+import * as bootstrap from "bootstrap";
 interface data {
     edit: boolean;
     item: PricelistItem;
@@ -174,7 +175,6 @@ export default {
         this.resetModal();
     },
     mounted(){
-        // @ts-ignore
         this.modal = new bootstrap.Modal(document.getElementById('priceModal'));
     },
     name: "priceModal"

@@ -11,7 +11,7 @@ import axios from 'axios';
  * @param {Boolean} enableTrades enable return of profit data for each trade
  * @return {Object}
  */
-export async function get(start: number, interval: number, end: number, enableTrades: boolean): Promise<Profit> {
+export async function get(start: number, interval: number, end: number, enableTrades?: boolean): Promise<Profit> {
 	const polldata = await fs.readJSON(paths.files.polldata);
 	const response = await axios(
 		{
@@ -138,7 +138,7 @@ export async function get(start: number, interval: number, end: number, enableTr
 
 		tradeProfits[trade.id] = tracker.profitTrack.getFormatted(tradeProfit);
 	}
-	
+
 	const returnObj = {
 		profitTotal: tracker.profitTrack.getFormatted(tracker.profitTrack.profit),
 		profitTimed: tracker.profitTrack.getFormatted(tracker.profitTrack.profitTimed),
@@ -151,7 +151,7 @@ export async function get(start: number, interval: number, end: number, enableTr
 	if (enableTrades) {
 		returnObj['tradeProfits'] = tradeProfits;
 	}
-	
+
 	return returnObj;
 };
 
@@ -201,9 +201,9 @@ class profitTracker {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {Number} normalizedAmount amount of profit made normalized to keys or scrap
-	 * @param {Number} time trade time 
+	 * @param {Number} time trade time
 	 */
 	countProfit(normalizedAmount: number, time: number): void {
 		this.profit += normalizedAmount;
@@ -248,15 +248,15 @@ class profitTracker {
 	}
 
 	/**
-	 * 
-	 * @param {Number} normalPrice 
+	 *
+	 * @param {Number} normalPrice
 	 * @return {String} formatted string
 	 */
 	getFormatted(normalPrice: number): string {
 		const key = new Currency({
 			metal: this.currentKey
 		}).toValue(this.currentKey); // get value in scrap
-		
+
 		const metal = Currency.toRefined(normalPrice % key);
 		const keys = normalPrice > 0 ? Math.floor(normalPrice / key) : Math.ceil(normalPrice / key);
 
@@ -286,9 +286,9 @@ class itemTracker {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {Number} itemCount item to add
-	 * @param {String} sku 
+	 * @param {String} sku
 	 * @param {Object} prices prices for this item
 	 * @param {Number} rate key rate
 	 * @param {Number} time
@@ -330,9 +330,9 @@ class itemTracker {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {Number} itemCount number of items sold
-	 * @param {String} sku 
+	 * @param {String} sku
 	 * @param {Object} prices prices for item sold
 	 * @param {Number} rate key rate
 	 * @param {Number} time time of trade
@@ -365,14 +365,14 @@ class itemTracker {
 				price: this.convert(prices, rate)
 			};
 		}
-		
+
 		return itemProfit;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {Object} prices {keys, metal} price to convert
-	 * @param {Number} keyPrice 
+	 * @param {Number} keyPrice
 	 * @return {Number} converted
 	 */
 	convert(prices: Currency, keyPrice: number): number {

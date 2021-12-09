@@ -6,7 +6,7 @@
     "moduleResolution": "Node",
     "sourceMap": true,
     "allowJs": false,
-    "checkJs": true,
+    "checkJs": false,
     "outDir": "../../dist",
     "rootDir": "..",
     "removeComments": true,
@@ -17,6 +17,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "typeRoots": ["./types/modules",
+      "../common/types/modules",
       "../../node_modules/@types"
     ]
   },

@@ -60,6 +60,7 @@
 </template>
 
 <script lang="ts">
+import * as bootstrap from 'bootstrap';
 import modal from '../components/modal.vue'
 interface data {
     input: string;
@@ -138,7 +139,6 @@ export default {
         },
     },
     mounted(){
-        // @ts-ignore
         this.modal = new bootstrap.Modal(document.getElementById('bulkModal'));
     },
     name: "bulkAddModal"

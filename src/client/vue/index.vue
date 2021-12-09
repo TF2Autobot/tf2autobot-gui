@@ -40,10 +40,10 @@ export default {
         }
     },
     methods: {
-        filterPricelist(item) {
+        filterPricelist(item: any) {
             return true;
         },
-        msgClose(msg) {
+        msgClose(msg: any) {
             this.messages.splice(msg,1);
         },
         loadItems() {

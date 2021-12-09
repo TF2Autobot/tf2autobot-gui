@@ -100,22 +100,10 @@ if (process.env.VPS == 'true') { // Running on vps, require a login
 }
 
 app
-	.use('/', index)
-	.use('/removeItems', removeItems)
-	.use('/clearPricelist', clearPricelist)
-	.use('/addItem', addItem)
-	//.use('/addItems', addItems)
-	.use('/trades', trades)
-	.use('/changeItem', changeItem)
-	//.use('/search', search)
-	.use('/getItems', getItems)
-	.use('/profit', profit)
-	.use('/autoprice', autoprice)
-	.use('/auth', authRoutes);
-
-app.get('/logout', function(req, res) {
-	req.logout();
-	res.redirect('/');
-});
+	.use(index)
+	.get('/logout', function(req, res) {
+		req.logout();
+		res.redirect('/');
+	});
 
 export = app;

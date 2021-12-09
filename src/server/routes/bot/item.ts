@@ -3,7 +3,7 @@
 import express, {Router} from 'express';
 import SchemaManager from "tf2-schema-2";
 import Currency from "tf2-currencies-2";
-import {PricelistItem} from "../../common/types/pricelist";
+import {PricelistItem} from "../../../common/types/pricelist";
 
 export = function (schemaManager: SchemaManager): Router {
     const router = express.Router();

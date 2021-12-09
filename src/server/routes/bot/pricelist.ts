@@ -7,11 +7,13 @@ import SchemaManager from "tf2-schema-2";
 import SKU from 'tf2-sku-2';
 import paths from '../../config/paths';
 import fs from "fs-extra";
+import BotConnectionManager from "../../IPC";
 
-export = function (schemaManager: SchemaManager): Router {
+export = function (schemaManager: SchemaManager, botManager: BotConnectionManager): Router {
     const router = express.Router();
     const schema = schemaManager.schema;
     router.get('/', (req, res) => {
+        //botManager
         const pricelist = fs.readJSONSync(paths.files.pricelist) as Pricelist; //TODO fetch from bot
         const keyPrice = 56; //TODO fetch from bot
         for (let i = 0; i < pricelist.length; i++) {
