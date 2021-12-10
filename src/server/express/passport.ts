@@ -39,10 +39,20 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
             res.redirect(301, '/');
         })
         .use((req, res, next) => {
+            if(Object.keys(botManager.bots).length === 0) {
+                res.render('noBots');
+            }
             if(req.user && !req.session.bot) {
-                res.render('pickBot', {bots: Object.values(botManager.bots)
-                        .filter(bot=>bot.admins.includes(req.user.id))
-                        .map(bot=>bot.id)});
+                if(Object.keys(botManager.bots).length == 1) {
+                    req.session.bot = Object.keys(botManager.bots)[0];
+                    next();
+                } else {
+                    res.render('pickBot', {
+                        bots: Object.values(botManager.bots)
+                            .filter(bot => bot.admins.includes(req.user.id))
+                            .map(bot => bot.id)
+                    });
+                }
             } else {
                 next()
             }
