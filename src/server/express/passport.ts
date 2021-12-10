@@ -34,19 +34,6 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
 
     app.use(passport.initialize())
         .use(passport.session())
-        .use((req, res, next) => {
-            if (req.originalUrl.startsWith('/auth/steam')) { // Trying to log in, continue
-                return next();
-            }
-            if (req.user) { // Is logged in
-                if (req.session.bot && botManager.bots[req.session.bot]?.admins?.includes(req.user.id)) { // Is an admin, continue TODO: remove true
-                    return next();
-                }
-                res.status(401);
-                return res.render('no', { user: req.user });
-            }
-            res.redirect('/auth/steam');
-        })
         .get('/pickbot', (req, res)=>{
             res.render('pickBot', {
                 bots: Object.values(botManager.bots)
@@ -59,13 +46,18 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
             res.redirect(301, '/');
         })
         .use((req, res, next) => {
+            if(!req.user) {
+                next();
+                return;
+            }
             let bots = Object.values(botManager.bots)
                 .filter(bot => bot.admins.includes(req.user.id)||bot.id===req.user.id)
                 .map(bot => bot.id);
             if(bots.length === 0) {
                 res.render('noBots');
+                return;
             }
-            if(req.user && !req.session.bot) {
+            if(!req.session.bot) {
                 if(bots.length == 1) {
                     req.session.bot = bots[0];
                     next();
@@ -78,5 +70,17 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
                 next()
             }
         })
-
+        .use((req, res, next) => {
+            if (req.originalUrl.startsWith('/auth/steam')) { // Trying to log in, continue
+                return next();
+            }
+            if (req.user) { // Is logged in
+                if (req.session.bot && (botManager.bots[req.session.bot]?.admins?.includes(req.user.id) || req.session.bot === req.user.id)) { // Is an admin or bot, continue
+                    return next();
+                }
+                res.status(401);
+                return res.render('no', { user: req.user });
+            }
+            res.redirect('/auth/steam');
+        })
 }
