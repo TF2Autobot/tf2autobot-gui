@@ -34,36 +34,6 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
 
     app.use(passport.initialize())
         .use(passport.session())
-        .get('/pickbot', (req, res)=>{
-            res.render('pickBot', {
-                bots: Object.values(botManager.bots)
-                    .filter(bot => bot.admins.includes(req.user.id))
-                    .map(bot => bot.id)
-            });
-        })
-        .post('/pickbot', (req,res)=>{
-            req.session.bot = req.body.bot;
-            res.redirect(301, '/');
-        })
-        .use((req, res, next) => {
-            if(Object.keys(botManager.bots).length === 0) {
-                res.render('noBots');
-            }
-            if(req.user && !req.session.bot) {
-                if(Object.keys(botManager.bots).length == 1) {
-                    req.session.bot = Object.keys(botManager.bots)[0];
-                    next();
-                } else {
-                    res.render('pickBot', {
-                        bots: Object.values(botManager.bots)
-                            .filter(bot => bot.admins.includes(req.user.id))
-                            .map(bot => bot.id)
-                    });
-                }
-            } else {
-                next()
-            }
-        })
         .use((req, res, next) => {
             if (req.originalUrl.startsWith('/auth/steam')) { // Trying to log in, continue
                 return next();
@@ -76,6 +46,37 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
                 return res.render('no', { user: req.user });
             }
             res.redirect('/auth/steam');
+        })
+        .get('/pickbot', (req, res)=>{
+            res.render('pickBot', {
+                bots: Object.values(botManager.bots)
+                    .filter(bot => bot.admins.includes(req.user.id))
+                    .map(bot => bot.id)
+            });
+        })
+        .post('/pickbot', (req,res)=>{
+            req.session.bot = req.body.bot;
+            res.redirect(301, '/');
+        })
+        .use((req, res, next) => {
+            let bots = Object.values(botManager.bots)
+                .filter(bot => bot.admins.includes(req.user.id)||bot.id===req.user.id)
+                .map(bot => bot.id);
+            if(bots.length === 0) {
+                res.render('noBots');
+            }
+            if(req.user && !req.session.bot) {
+                if(bots.length == 1) {
+                    req.session.bot = bots[0];
+                    next();
+                } else {
+                    res.render('pickBot', {
+                        bots: bots
+                    });
+                }
+            } else {
+                next()
+            }
         })
 
 }

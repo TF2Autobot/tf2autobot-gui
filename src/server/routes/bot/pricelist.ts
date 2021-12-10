@@ -10,7 +10,7 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
         //botManager
         let pricelist
         try {
-            pricelist = await botManager.getBotPricelist(process.env.BOT_ID);// fs.readJSONSync(paths.files.pricelist) as Pricelist; //TODO fetch from bot
+            pricelist = await botManager.getBotPricelist(req.session.bot);// fs.readJSONSync(paths.files.pricelist) as Pricelist; //TODO fetch from bot
         } catch (e) {
             console.error(e);
         }

@@ -38,7 +38,7 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
     router.post('/', (req,res)=>{
         const item = req.body as PricelistItem;
         if(checkItem(item, res)) return;
-        botManager.addItem(process.env.BOT_ID ,item)
+        botManager.addItem(req.session.bot ,item)
             .then(ret => {
                 if(typeof ret === 'object') {
                     res.json( processPricelistItem(ret, schema));
@@ -50,7 +50,7 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
     router.patch('/', (req,res)=>{
         const item = req.body as PricelistItem;
         if(checkItem(item, res)) return;
-        botManager.updateItem(process.env.BOT_ID, item)
+        botManager.updateItem(req.session.bot, item)
             .then(ret => {
                 if(typeof ret === 'object') {
                     res.json( processPricelistItem(ret, schema));
@@ -61,7 +61,7 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
     });
     router.delete('/', (req,res)=>{
         const sku = req.body.sku as string;
-        botManager.removeItem(process.env.BOT_ID, sku)
+        botManager.removeItem(req.session.bot, sku)
             .then(ret => {
                 if(typeof ret === 'object') {
                     res.json(ret);
