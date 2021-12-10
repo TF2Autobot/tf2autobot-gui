@@ -34,6 +34,13 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
 
     app.use(passport.initialize())
         .use(passport.session())
+        .get('/pickbot', (req, res)=>{
+            res.render('pickBot', {
+                bots: Object.values(botManager.bots)
+                    .filter(bot => bot.admins.includes(req.user.id))
+                    .map(bot => bot.id)
+            });
+        })
         .post('/pickbot', (req,res)=>{
             req.session.bot = req.body.bot;
             res.redirect(301, '/');
