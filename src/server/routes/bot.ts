@@ -5,6 +5,7 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
     const router = express.Router();
     const schema = schemaManager.schema;
     router
+        .use('/pricelist/bulk', (require('./bot/batch'))(schemaManager, botManager))
         .use('/pricelist', (require('./bot/pricelist'))(schemaManager, botManager))
         .use('/pricelist/item', (require('./bot/item'))(schemaManager, botManager))
     return router;

@@ -5,6 +5,8 @@
         <bulk-add ref="bulkAdd" :reloadItems="loadItems" @message="this.addMessage"></bulk-add>
         <price-modal ref="priceModal" @item="itemUpdate($event)"></price-modal>
         <button @click="$refs.priceModal.show()">Add Item</button>
+        <button @click="$refs.bulkAdd.show()">Bulk Add Items</button>
+        <button @click="grid=!grid">Toggle Grid</button>
         <item-grid v-if="grid" :pricelist="pricelist" :filter="filterPricelist" :multi-select="[]" @itemClick="$refs.priceModal.show(true, $event)"></item-grid>
         <item-list v-else :pricelist="pricelist" :filter="filterPricelist" :multi-select="[]" @itemClick="$refs.priceModal.show(true, $event)"></item-list>
     </div>

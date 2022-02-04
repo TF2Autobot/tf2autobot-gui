@@ -50,6 +50,10 @@
                     <label for="maximum">Maximum stock</label>
                     <input type="number" class="form-control" id="maximum" name="max" min="0" required v-model="max">
                 </div>
+                <div class="col">
+                    <label for="group">Group</label>
+                    <input type="text" class="form-control" id="group" name="group" v-model="group">
+                </div>
             </div>
         </template>
         <template v-slot:footer>
@@ -76,7 +80,8 @@ interface data {
     },
     max: number;
     min: number;
-    modal: bootstrap.Modal
+    group: string;
+    modal: bootstrap.Modal;
 }
 
 export default {
@@ -96,6 +101,7 @@ export default {
                 metal: 0,
                 keys: 0
             },
+            group: '',
             max: 1,
             min: 0,
             modal: null
@@ -121,7 +127,7 @@ export default {
             };
             this.$emit('message',{msg: 'Bulk add started, it might take a while.', type:'secondary'});
             this.modal.hide();
-            fetch('/pricelist', { //TODO: IMPLEMENT BACKEND
+            fetch('/pricelist/bulk', { //TODO: IMPLEMENT BACKEND
                 method: 'POST',
                 body: JSON.stringify(postData),
                 headers: {
