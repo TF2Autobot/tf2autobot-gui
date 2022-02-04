@@ -1,7 +1,7 @@
 import * as data from '../data';
-import SKU from 'tf2-sku-2';
+import SKU from '@tf2autobot/tf2-sku';
 import { Item } from '../types/TeamFortress2';
-import SchemaManager from "tf2-schema-2";
+import SchemaManager from "@tf2autobot/tf2-schema";
 
 export default function getName(item: Item | string, schema: SchemaManager.Schema, proper = true): string {
 	// If its a sku and not an item object

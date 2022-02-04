@@ -2,7 +2,7 @@ import * as profit from '../app/profit';
 import fs from 'fs-extra';
 import paths from '../config/paths';
 import express, {Router} from 'express';
-import SchemaManager from "tf2-schema-2";
+import SchemaManager from "@tf2autobot/tf2-schema";
 
 export default function (schemaManager: SchemaManager): Router {
 	const router = express.Router();

@@ -1,8 +1,8 @@
 import express, {Router} from 'express';
 const router = express.Router();
-import Currency from 'tf2-currencies-2';
+import Currency from '@tf2autobot/tf2-currencies';
 import * as pricelist from '../app/pricelist';
-import SchemaManager from "tf2-schema-2";
+import SchemaManager from "@tf2autobot/tf2-schema";
 
 export = function (schemaManager: SchemaManager): Router {
 	const router = express.Router();

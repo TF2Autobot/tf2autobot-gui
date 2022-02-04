@@ -1,6 +1,6 @@
-import SKU from 'tf2-sku-2';
+import SKU from '@tf2autobot/tf2-sku';
 import { qualityColors, paintCanColors } from '../data';
-import SchemaManager from "tf2-schema-2";
+import SchemaManager from "@tf2autobot/tf2-schema";
 
 /**
  *

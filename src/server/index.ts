@@ -6,7 +6,7 @@ require( 'console-stamp' )( console );
 
 import express from 'express';
 import initApp from './express/init';
-import SchemaManager from 'tf2-schema-2';
+import SchemaManager from '@tf2autobot/tf2-schema';
 import BotConnectionManager from "./IPC";
 import fs from "fs";
 import * as https from "https";

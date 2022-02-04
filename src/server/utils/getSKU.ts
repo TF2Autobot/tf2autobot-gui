@@ -1,5 +1,5 @@
 import { wear, wears, quality, qualities, effect, effects, killstreak, killstreaks, skin, skins } from '../data';
-import SKU from 'tf2-sku-2';
+import SKU from '@tf2autobot/tf2-sku';
 import fixItem from '../utils/fixItem';
 
 /**

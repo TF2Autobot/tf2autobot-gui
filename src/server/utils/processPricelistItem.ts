@@ -1,9 +1,9 @@
 import {PricelistItem} from "../../common/types/pricelist";
-import SKU from "tf2-sku-2";
+import SKU from "@tf2autobot/tf2-sku";
 import getStatsLink from "./getStatsLink";
-import Currency from "tf2-currencies-2";
+import Currency from "@tf2autobot/tf2-currencies";
 import {getImageStyle} from "./getImage";
-import {Schema} from "tf2-schema-2";
+import {Schema} from "@tf2autobot/tf2-schema";
 
 const keyPrice = 56; //TODO fetch from bot
 

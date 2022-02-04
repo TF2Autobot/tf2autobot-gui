@@ -1,5 +1,5 @@
 import {Express} from "express";
-import SchemaManager from "tf2-schema-2";
+import SchemaManager from "@tf2autobot/tf2-schema";
 import BotConnectionManager from "../IPC";
 
 export default function init(app: Express, schemaManager: SchemaManager, botManager: BotConnectionManager): void {

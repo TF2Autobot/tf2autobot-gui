@@ -1,5 +1,5 @@
 import { defindexes } from '../data';
-import SchemaManager, {SchemaItem} from "tf2-schema-2";
+import SchemaManager, {SchemaItem} from "@tf2autobot/tf2-schema";
 
 export = function(itemInfo, schema: SchemaManager.Schema) {
 	if (isStockWeapon(itemInfo.schemaItem)) {

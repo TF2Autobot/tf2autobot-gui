@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import paths from '../config/paths';
-import Currency from 'tf2-currencies-2';
+import Currency from '@tf2autobot/tf2-currencies';
 import axios from 'axios';
 
 // TODO: Make this into class

@@ -1,10 +1,10 @@
 import { wear, wears, quality, qualities, effect, effects, killstreak, killstreaks, skin, skins, qualityColors } from '../data';
 import fixItem from './fixItem';
 import getName from './getName';
-import SKU from 'tf2-sku-2';
+import SKU from '@tf2autobot/tf2-sku';
 import Fuse from 'fuse.js';
 import { Item } from 'types/TeamFortress2';
-import SchemaManager, {SchemaItem} from "tf2-schema-2";
+import SchemaManager, {SchemaItem} from "@tf2autobot/tf2-schema";
 
 interface ItemWithSearch extends Item {
 	search: string;

@@ -11,7 +11,7 @@ import authRoutes from "./auth";
 import addItems from './addItems';
 import search from './search';
 import bot from './bot';
-import SchemaManager from "tf2-schema-2";
+import SchemaManager from "@tf2autobot/tf2-schema";
 import BotConnectionManager from "../IPC";
 
 export = function init(schemaManager: SchemaManager, botManager: BotConnectionManager) : Router {

@@ -1,12 +1,12 @@
 import express, {Router} from 'express';
-import SchemaManager from "tf2-schema-2";
+import SchemaManager from "@tf2autobot/tf2-schema";
 import paths from '../config/paths';
 import fs from 'fs-extra';
 import getName from '../utils/getName';
 import { getImageStyle } from '../utils/getImage';
 import getStatsLink from '../utils/getStatsLink';
 import axios from 'axios';
-import Currency from 'tf2-currencies-2';
+import Currency from '@tf2autobot/tf2-currencies';
 
 let lastKeyCheck = 0;
 let lastKeyPrice = 0;

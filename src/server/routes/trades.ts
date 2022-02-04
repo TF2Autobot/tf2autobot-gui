@@ -1,5 +1,5 @@
 import express, {Router} from 'express';
-import SchemaManager from "tf2-schema-2";
+import SchemaManager from "@tf2autobot/tf2-schema";
 const router = express.Router();
 import * as trades from '../app/trades';
 import fs from 'fs-extra';

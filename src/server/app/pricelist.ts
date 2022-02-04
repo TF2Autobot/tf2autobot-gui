@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import fs from 'fs-extra';
-import SKU from 'tf2-sku-2';
-import Currencies from 'tf2-currencies-2';
+import SKU from '@tf2autobot/tf2-sku';
+import Currencies from '@tf2autobot/tf2-currencies';
 import getSKU from '../utils/getSKU';
 import getName from '../utils/getName';
 import paths from '../config/paths';

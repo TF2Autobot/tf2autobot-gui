@@ -3,10 +3,10 @@ import paths from '../config/paths';
 import getName from '../utils/getName';
 import * as data from '../data';
 import dayjs from 'dayjs';
-import SKU from 'tf2-sku-2';
+import SKU from '@tf2autobot/tf2-sku';
 import * as getImage from '../utils/getImage';
 import * as profit from './profit';
-import SchemaManager from "tf2-schema-2";
+import SchemaManager from "@tf2autobot/tf2-schema";
 
 /**
  *
