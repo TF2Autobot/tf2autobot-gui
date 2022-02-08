@@ -136,7 +136,7 @@ export default {
             })
                 .then(response => response.json())
                 .then(data => {
-                    this.$emit('message', {type: data.msg.type, message: data.msg.message});
+                    this.$emit('message', {type: data.msg.type, msg: data.msg.message});
                     this.reloadItems();
                 })
                 .catch((error) => {

@@ -8,9 +8,9 @@ import testSKU from "../../utils/testSKU";
 export = function (schemaManager: SchemaManager, botManager: BotConnectionManager): Router {
     const router = express.Router();
     const schema = schemaManager.schema;
-    router.post('/', (req,res)=>{
+    router.post('/', async (req,res)=>{
         console.log(req.body);
-        res.json({});
+        console.log('herre')
         const input = req.body.input.split(/\r?\n/);
 
         if (req.body.max - req.body.min < 0) {
@@ -23,40 +23,20 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
             });
             return;
         }
-
-        if (req.body.max - req.body.min < 1) {
-            res.json({
-                success: 0,
-                msg: {
-                    type: 'warning',
-                    message: 'The maximum stock must be atleast one higher than the minimum'
-                }
-            });
-            return;
-        }
-        input.forEach(function(item) {
-            if (item.includes('classifieds')) {
-                res.json({
-                    success: 0,
-                    msg: {
-                        type: 'danger',
-                        message: 'Please use the items stats page or full name, not the classifieds link'
-                    }
-                });
-                return;
-            }
-        });
-
+        const  sellvalues = {
+            keys: 0,
+            metal: 0
+        };
+        const buyvalues = {
+            keys: 0,
+            metal: 0
+        };
         if (!req.body.autoprice) {
-            const sellvalues = {
-                keys: Number(req.body.sell_keys),
-                metal: Number(req.body.sell_metal)
-            };
+            sellvalues.keys = Number(req.body.sell_keys);
+            sellvalues.metal = Number(req.body.sell_metal);
 
-            const buyvalues = {
-                keys: Number(req.body.buy_keys),
-                metal: Number(req.body.buy_metal)
-            };
+            buyvalues.keys =  Number(req.body.buy_keys);
+            buyvalues.metal = Number(req.body.buy_metal);
 
             // lower sell keys
             if (sellvalues.keys < buyvalues.keys && req.body.intent != 0) {
@@ -81,27 +61,50 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
                 return;
             }
         }
-        const failedIndexes = [];
+        const failed: {[id: number]: string} = {};
+        const items: PricelistItem[] = [];
         for(let i = 0; i<input.length; i++) {
             const e =input[i];
             let sku = testSKU(e) ? e : schema.getSkuFromName(e);
             if (sku.includes('null') || sku.includes('undefined')) {
-                failedIndexes.push(i);
+                failed[e] = 'Invalid sku or name';
                 continue;
             }
-
+            items.push({
+                sku,
+                max: req.body.max,
+                min: req.body.min,
+                intent: Number(req.body.intent),
+                buy: buyvalues,
+                sell: sellvalues,
+                promoted: 0, //ADD
+                note: {
+                    buy: '',
+                    sell: ''
+                }, //ADD
+                group: req.body.group, //ADD
+                autoprice: req.body.autoprice,
+                enabled: true,
+                time: Date.now()
+            });
         }
-        /*
-        const item = req.body as PricelistItem;
-        if(checkItem(item, res)) return;
-        botManager.addItem(req.session.bot ,item)
-            .then(ret => {
-                if(typeof ret === 'object') {
-                    res.json( processPricelistItem(ret, schema));
-                } else {
-                    res.json(typeof ret === "string" ? ret : ""); // make sure r is string
+        const addRes = await Promise.all(items.map(item =>  botManager.addItem(req.session.bot, item)));
+        const success = [];
+        for (const item of addRes) {
+            if(typeof item !== 'object') {
+                failed[item] = typeof item === "string" ? item : ""; // make sure r is string
+            }
+        }
+        if(Object.keys(failed).length > 0) {
+            res.json({
+                success: 0,
+                msg: {
+                    type: 'warning',
+                    message: Object.keys(failed).map(key=>`${key}: ${failed[key]}`).join('\n')
                 }
-            });*/
+            });
+        }
+        else res.json({success: 1, msg: {type: 'success',message: 'ok'}})
     });
     return router;
 }
