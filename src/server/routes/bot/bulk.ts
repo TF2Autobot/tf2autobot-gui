@@ -99,12 +99,12 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
             res.json({
                 success: 0,
                 msg: {
-                    type: 'warning',
+                    type: 'error',
                     message: Object.keys(failed).map(key=>`${key}: ${failed[key]}`).join('\n')
                 }
             });
         }
-        else res.json({success: 1, msg: {type: 'success',message: 'ok'}})
+        else res.json({success: 1, msg: {type: 'success', message: 'ok'}})
     });
     return router;
 }

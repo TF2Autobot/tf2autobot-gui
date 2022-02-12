@@ -14,7 +14,8 @@ module.exports = {
 	mode: env.production ? 'production' : 'development',
 	entry: {
 		index: './src/client/index.ts',
-		base: './src/client/base.ts'
+		base: './src/client/base.ts',
+		trades: './src/client/trades.ts'
 	},
 	resolve: {
 		// Add `.ts` as a resolvable extension.

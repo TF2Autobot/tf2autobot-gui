@@ -4,33 +4,20 @@ const router = express.Router();
 import * as trades from '../app/trades';
 import fs from 'fs-extra';
 import paths from '../config/paths';
+import BotConnectionManager from "../IPC";
 
-export = function (schemaManager: SchemaManager): Router {
+export = function (schemaManager: SchemaManager, botManager: BotConnectionManager): Router {
     const router = express.Router();
     const schema = schemaManager.schema;
-    router.get('/', (req, res) => {
-        if (req.query.json!='true') {
-            if (!fs.existsSync(paths.files.polldata)) {
-                res.render('trades', {
-                    data: null,
-                    polldata: false
-                });
-                return;
-            }
-
+    router.get('/', async (req, res) => {
+        if (req.accepts('text/html')) {
             res.render('trades', {
                 polldata: true,
                 user: req.user
             });
-        } else {
-            if (!fs.existsSync(paths.files.polldata)) {
-                res.json({
-                    success: 0
-                });
-                return;
-            }
-
-            trades.get(Number(req.query.first), Number(req.query.count), Number(req.query.dir)==1, req.query.search as string, schema)
+        } else if(req.accepts('application/json')){
+            const polldata = await botManager.getTrades(req.session.bot);
+            trades.get(Number(req.query.first)||0, Number(req.query.count)||50, Number(req.query.dir)==1, (req.query.search ?? '') as string, schema, polldata)
                 .then((data) => {
                     res.json({
                         success: 1,

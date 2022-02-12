@@ -159,7 +159,7 @@ export default {
                 return;
             }
             this.hide();
-            fetch('/pricelist/item', { //TODO: IMPLEMENT BACKEND
+            fetch('/pricelist/item', {
                 method: this.edit? 'PATCH':'POST',
                 body: JSON.stringify(this.item),
                 headers: {

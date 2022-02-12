@@ -1,5 +1,5 @@
-import * as Vue from 'vue';
-import index from './vue/index.vue';
+import * as Vue from 'vue'
+import index from './vue/trades.vue'
 
 Vue.createApp(index).mount(
     '#app'

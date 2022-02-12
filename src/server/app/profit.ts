@@ -9,11 +9,11 @@ import axios from 'axios';
  * @param {Number} interval time interval to plot, set to -1 or undefined to disable profit plot
  * @param {Number} end time to end plot, set to -1 to disable profit timed and plot or undefined to disable just plot
  * @param {Boolean} enableTrades enable return of profit data for each trade
+ * @param polldata
  * @return {Object}
  */
-export async function get(start: number, interval: number, end: number, enableTrades?: boolean): Promise<Profit> {
-	const polldata = await fs.readJSON(paths.files.polldata);
-	const response = await axios(
+export async function get(start: number, interval: number, end: number, polldata: any, enableTrades?: boolean, ): Promise<Profit> {
+	/*const response = await axios(
 		{
 			url: 'https://api.prices.tf/items/5021;6',
 			method: 'GET',
@@ -22,10 +22,10 @@ export async function get(start: number, interval: number, end: number, enableTr
 			},
 			responseType: 'json'
 		}
-	);
+	);*/
 
-	const keyVal = response.data.sell.metal;
-	const trades = Object.keys(polldata.offerData).map((key) => {
+	const keyVal = 67.55;//response.data.sell.metal; TODO get from bot
+	const trades = Object.keys(polldata.offerData).map((key) => { //TODO: catch no OfferData
 		const ret = polldata.offerData[key];
 		ret.time = polldata.timestamps[key];
 		ret.id = key;

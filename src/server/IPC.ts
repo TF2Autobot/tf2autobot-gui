@@ -34,6 +34,24 @@ export default class BotConnectionManager {
             this.ipc.server.once('info', callback);
         }
     }
+
+    static cleanItem(item){
+        return {
+            sku: item.sku,
+            enabled: item.enabled,
+            autoprice: item.autoprice,
+            min: item.min,
+            max: item.max,
+            intent: parseInt(item?.intent),
+            buy: { keys: item.buy?.keys, metal: item.buy?.metal },
+            sell: { keys: item.sell?.keys, metal: item.sell?.metal },
+            promoted: item.promoted,
+            group: item.group,
+            note: { buy: item.note.buy, sell: item.note.sell },
+            isPartialPriced: item.isPartialPriced
+        }
+    }
+
     getBotPricelist(id: string) {
         return new Promise<undefined | Pricelist>((resolve, reject)=>{
             if(!this.bots[id]) reject("no bot found");
@@ -53,7 +71,7 @@ export default class BotConnectionManager {
                 this.ipc.server.emit(
                     this.bots[id].socket,
                     'addItem',
-                    item
+                    BotConnectionManager.cleanItem(item)
                 );
                 this.ipc.server.once('itemAdded', resolve);
             }
@@ -66,7 +84,7 @@ export default class BotConnectionManager {
                 this.ipc.server.emit(
                     this.bots[id].socket,
                     'updateItem',
-                    item
+                    BotConnectionManager.cleanItem(item)
                 );
                 this.ipc.server.once('itemUpdated', resolve);
             }
@@ -85,6 +103,20 @@ export default class BotConnectionManager {
             }
         });
     }
+
+    getTrades(id: string) {
+        return new Promise<undefined | PricelistItem>((resolve, reject)=>{
+            if(!this.bots[id]) reject("no bot found");
+            else {
+                this.ipc.server.emit(
+                    this.bots[id].socket,
+                    'getTrades'
+                );
+                this.ipc.server.once('polldata', resolve); //TODO: cache
+            }
+        });
+    }
+
     init() {
         this.ipc.config.id = 'autobot_gui_dev';
         this.ipc.config.retry = 1500;

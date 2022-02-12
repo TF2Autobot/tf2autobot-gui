@@ -7,6 +7,7 @@ import SKU from '@tf2autobot/tf2-sku';
 import * as getImage from '../utils/getImage';
 import * as profit from './profit';
 import SchemaManager from "@tf2autobot/tf2-schema";
+import {getImageStyle} from "../utils/getImage";
 
 /**
  *
@@ -14,11 +15,12 @@ import SchemaManager from "@tf2autobot/tf2-schema";
  * @param {Number} count how many trades to include in results, set to -1 to return all
  * @param {Boolean} descending sort
  * @param {String} search string to search listings for
+ * @param schema
+ * @param polldata
  */
-export async function get(first: number, count: number, descending: boolean, search: string, schema: SchemaManager.Schema) {
+export async function get(first: number, count: number, descending: boolean, search: string, schema: SchemaManager.Schema, polldata: any) {
 	search = search.trim().toLowerCase();
-	const polldata = await fs.readJSON(paths.files.polldata);
-	const profitData = (await profit.get(undefined, undefined, undefined, true)).tradeProfits;
+	const profitData = (await profit.get(undefined, undefined, undefined, polldata, true)).tradeProfits;
 	let tradeList = Object.keys(polldata.offerData).map((key) => {
 		const ret = polldata.offerData[key];
 		ret.id = key;
@@ -41,6 +43,7 @@ export async function get(first: number, count: number, descending: boolean, sea
 		return a - b;
 	});
 	tradeList = tradeList.filter((offer) => {
+		if(!search) return true;
 		let offerSearchResults = false;
 		if (Object.prototype.hasOwnProperty.call(offer, 'dict')) {
 			offerSearchResults = Object.keys(offer.dict.our).some(item => {

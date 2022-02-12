@@ -24,7 +24,7 @@ export = function init(schemaManager: SchemaManager, botManager: BotConnectionMa
 		.use('/clearPricelist', clearPricelist)
 		.use('/addItem', addItem(schemaManager))
 		.use('/addItems', addItems(schemaManager))
-		.use('/trades', trades(schemaManager))
+		.use('/trades', trades(schemaManager, botManager))
 		.use('/changeItem', changeItem)
 		.use('/search', search(schemaManager))
 		.use('/getItems', getItems(schemaManager))
