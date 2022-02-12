@@ -16,7 +16,7 @@ export default function (schemaManager: SchemaManager): Router {
 				return;
 			}
 
-			profit.get(Number(req.query.start), Number(req.query.interval), Number(req.query.end))
+			/*profit.get(Number(req.query.start), Number(req.query.interval), Number(req.query.end))
 				.then((data) => {
 					res.json({
 						success: 1,
@@ -25,7 +25,7 @@ export default function (schemaManager: SchemaManager): Router {
 				})
 				.catch((err) => {
 					throw err;
-				});
+				});*/
 		} else {
 			res.render('profit', { user: req.user });
 		}
