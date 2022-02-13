@@ -1,15 +1,15 @@
 <template>
     <div class="item m-1"
-         :style="{ backgroundImage: `url( ${item.style.image_small} ), url( ${item.style.effect} )`, backgroundColor: item.style.quality_color, borderStyle: item.style.craftable? false : 'dashed', opacity: item.enabled?1:0.5, borderColor: item.style.border_color}"
+         :style="{ backgroundImage: `url( ${item.style.image_small} ), url( ${item.style.effect} )`, backgroundColor: item.style.quality_color, borderStyle: item.style.craftable? false : 'dashed', opacity: (item.enabled??true)?1:0.5, borderColor: item.style.border_color}"
          @click="$emit('itemClick', item)">
         <div class="info text-center font-weight-bold" v-if="!selected">
             {{item.name}}
         </div>
-        <div class="price" v-if="!selected">
+        <div class="price" v-if="!selected && (item.sell || item.buy)">
             B: {{item.buy?.string ?? ''}}<br>
             S: {{item.sell?.string ?? ''}}
         </div>
-        <svg class="bi bi-check item-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" v-else>
+        <svg class="bi bi-check item-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" v-else-if="selected">
             <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
         </svg>
         <div class="ks">
