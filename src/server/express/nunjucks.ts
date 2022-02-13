@@ -1,6 +1,7 @@
 import {Express} from "express";
 import nunjucks from 'nunjucks';
 import path from 'path';
+import fs from "fs-extra";
 
 export = function init(app: Express): void {
     let env = nunjucks.configure('src/client/views', {
@@ -10,7 +11,7 @@ export = function init(app: Express): void {
     env
         .addGlobal('load_entry_tags', function (entrypoint, type) {
             const webpack = require(path.join(process.cwd(), 'webpack.config.js'))
-            let entrypoints = require(path.join(webpack.output.path, './manifest.json'));
+            let entrypoints = fs.readJsonSync(path.join(webpack.output.path, './manifest.json'));
             if (!entrypoints[entrypoint]) return '';
             return entrypoints[entrypoint]
                 .filter(e => {
