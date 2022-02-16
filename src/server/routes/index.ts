@@ -20,16 +20,16 @@ export = function init(schemaManager: SchemaManager, botManager: BotConnectionMa
 		.get('/', (req, res) => {
 			res.render('index', { user: req.user });
 		})
-		.use('/removeItems', removeItems)
-		.use('/clearPricelist', clearPricelist)
-		.use('/addItem', addItem(schemaManager))
-		.use('/addItems', addItems(schemaManager))
+		//.use('/removeItems', removeItems)
+		//.use('/clearPricelist', clearPricelist)
+		//.use('/addItem', addItem(schemaManager))
+		//.use('/addItems', addItems(schemaManager))
 		.use('/trades', trades(schemaManager, botManager))
-		.use('/changeItem', changeItem)
+		//.use('/changeItem', changeItem)
 		.use('/search', search(schemaManager))
-		.use('/getItems', getItems(schemaManager))
-		.use('/profit', profit(schemaManager))
-		.use('/autoprice', autoprice)
+		//.use('/getItems', getItems(schemaManager))
+		//.use('/profit', profit(schemaManager))
+		//.use('/autoprice', autoprice)
 		.use('/auth', authRoutes)
 		.use(bot(schemaManager, botManager));
 	return router;

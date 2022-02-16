@@ -44,9 +44,12 @@
                     </div>
                 </div>
             </div>
-            <button class="p-2" v-if="tradeList.length >= toShow" @click="toShow+=25">
+            <button class="p-2" v-if="tradeList.length >= toShow && !loadLock" @click="toShow+=25">
                 Show More
             </button>
+            <div v-if="loadLock" class="text-center">
+                Loading more trades ...
+            </div>
         </div>
     </div>
 </template>
@@ -72,15 +75,17 @@ export default {
             search: '',
             order: 1,
             acceptedOnly: 0,
-            tradeCount: 0
+            tradeCount: 0,
+            loadLock: false
         }
     },
     components: {
         gridItem
     },
     methods: {
-        loadTrades() {
-            fetch('', {headers: {
+        loadTrades(first=0, count=50) {
+            this.loadLock = true;
+            fetch(`?first=${first}&count=${count}&dir=${this.order}&search=${encodeURIComponent(this.search)}`, {headers: {
                     'Accept': 'application/json',
                 }})
                 .then((response) => {
@@ -88,19 +93,51 @@ export default {
                 })
                 .then((data) => {
                     if(data.success){
-                        this.tradeList = data.data.trades;
-                        this.items = data.data.items;
+                        this.tradeCount = data.data.tradeCount;
+                        if (first === 0) {
+                            this.tradeList = data.data.trades;
+                            this.items = data.data.items;
+                        } else { // we are just adding items
+                            this.tradeList = this.tradeList.concat(data.data.trades);
+                            this.items = Object.assign(this.items, data.data.items);
+                        }
                     } else {
                         this.error = ""
                     }
                 })
                 .catch((error) => {
                     console.error('Error: ', error);
+                })
+                .finally(()=>{
+                    this.loadLock = false;
                 });
         },
+        scroll() {
+            console.log('onscroll hooked');
+            window.onscroll = () => {
+                console.log('onscroll called');
+                const bottomOfWindow = Math.max(window.scrollY, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight === document.documentElement.offsetHeight;
+                if (bottomOfWindow&&!this.loadLock&& this.toShow < this.tradeCount) {
+                    const nuberToAdd = 50;
+                    this.loadTrades(this.toShow, nuberToAdd);
+                    this.toShow += nuberToAdd;
+                }
+            };
+        }
+    },
+    watch: {
+        order: function() {
+            this.loadTrades(0, this.toShow);
+        },
+        search: function() {
+            this.loadTrades(0, this.toShow);
+        }
     },
     created() {
         this.loadTrades();
+    },
+    mounted() {
+        this.scroll();
     }
 };
 </script>

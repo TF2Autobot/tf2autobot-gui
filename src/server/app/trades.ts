@@ -1,5 +1,3 @@
-import fs from 'fs-extra';
-import paths from '../config/paths';
 import getName from '../utils/getName';
 import * as data from '../data';
 import dayjs from 'dayjs';
@@ -7,7 +5,6 @@ import SKU from '@tf2autobot/tf2-sku';
 import * as getImage from '../utils/getImage';
 import * as profit from './profit';
 import SchemaManager from "@tf2autobot/tf2-schema";
-import {getImageStyle} from "../utils/getImage";
 
 /**
  *
@@ -50,7 +47,7 @@ export async function get(first: number, count: number, descending: boolean, sea
 				return getName(SKU.fromString(item), schema).toLowerCase().indexOf(search) > -1;
 			});
 		}
-		return offer.id.indexOf(search) > -1 || offerSearchResults;
+		return offer.partner?.indexOf(search) > -1 || offerSearchResults;
 	});
 	if (count != -1) {
 		tradeList = tradeList.slice(first, first + count);
