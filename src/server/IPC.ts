@@ -117,6 +117,20 @@ export default class BotConnectionManager {
         });
     }
 
+    sendChat(id: string, message: string){
+        return new Promise<string>((resolve, reject)=>{
+            if(!this.bots[id]) reject("this bot does not exist");
+            else {
+                this.ipc.server.emit(
+                    this.bots[id].socket,
+                    'sendChat',
+                    message
+                );
+                this.ipc.server.once('chatResp', resolve);
+            }
+        });
+    }
+
     init() {
         this.ipc.config.id = 'autobot_gui_dev';
         this.ipc.config.retry = 1500;

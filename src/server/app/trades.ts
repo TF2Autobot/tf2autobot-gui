@@ -43,15 +43,13 @@ export async function get(first: number, count: number, descending: boolean, sea
 		if(!search) return true;
 		let offerSearchResults = false;
 		if (Object.prototype.hasOwnProperty.call(offer, 'dict')) {
-			offerSearchResults = Object.keys(offer.dict.our).some(item => {
+			offerSearchResults = [].concat(Object.keys(offer.dict.our), Object.keys(offer.dict.their)).some(item => {
 				return getName(SKU.fromString(item), schema).toLowerCase().indexOf(search) > -1;
 			});
 		}
 		return offer.partner?.indexOf(search) > -1 || offerSearchResults;
 	});
-	if (count != -1) {
-		tradeList = tradeList.slice(first, first + count);
-	}
+	tradeList = tradeList.slice(first, count >= 0 ? first + count : undefined);
 	const items = {};
 	const trades = tradeList.map((offer) => {
 		const ret = {
@@ -104,7 +102,7 @@ export async function get(first: number, count: number, descending: boolean, sea
 	return {
 		trades,
 		items,
-		tradeCount
+		tradeCount: tradeList.length
 	};
 };
 

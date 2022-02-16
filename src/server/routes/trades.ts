@@ -29,5 +29,8 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
                 });
         }
     });
+    router.get('/stats', async (req, res)=>{
+        res.send(`<pre>${await botManager.sendChat(req.session.bot, "!stats")}</pre>`);
+    })
     return router;
 }
