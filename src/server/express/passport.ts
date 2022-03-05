@@ -21,8 +21,8 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
         done(null, obj);
     });
     passport.use(new SteamStrategy({
-            returnURL: process.env.VPS == 'true' ? `http://${ip}:${port}/auth/steam/return` : `http://127.0.0.1:${port}/auth/steam/return`,
-            realm: process.env.VPS == 'true' ? `http://${ip}:${port}/` : `http://127.0.0.1:${port}/`,
+            returnURL: process.env.VPS == 'true' ? `http${process.env.SSL=='true'?'s':''}://${ip}:${port}/auth/steam/return` : `http://127.0.0.1:${port}/auth/steam/return`,
+            realm: process.env.VPS == 'true' ? `http${process.env.SSL=='true'?'s':''}://${ip}:${port}/` : `http://127.0.0.1:${port}/`,
             apiKey: process.env.API_KEY
         },
         function(identifier, profile, done) {

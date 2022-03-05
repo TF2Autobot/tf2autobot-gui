@@ -31,33 +31,38 @@ const app = express();
 const botConnectionManager = new BotConnectionManager();
 botConnectionManager.init();
 
-const schemaManager = new SchemaManager({apiKey: process.env.API_KEY});
+const schemaManager = new SchemaManager({ apiKey: process.env.API_KEY });
 schemaManager.init(err => {
-    if(err) {
-        console.log('Schema manager failed to init, with error: ' + err)
-    } else {
-        initApp(app, schemaManager, botConnectionManager);
-        const httpServer = http.createServer(app);
-        httpServer.listen(port);
-        if(process.env.SSL) {
-            const credentials = {key: fs.readFileSync('local.key', 'utf8'), cert: fs.readFileSync('local.crt', 'utf8')};
-            const httpsServer = https.createServer(credentials, app);
-            httpsServer.listen(port_https);
-        }
-        console.log('server listening on port ' + port);
-    }
+	if(err) {
+		console.log('Schema manager failed to init, with error: ' + err)
+	} else {
+		initApp(app, schemaManager, botConnectionManager);
+		const httpServer = http.createServer(app);
+		httpServer.listen(port);
+		if(process.env.SSL) {
+			const credentials = { key: fs.readFileSync('local.key', 'utf8'),
+				cert: fs.readFileSync('local.crt', 'utf8') };
+			const httpsServer = https.createServer(credentials, app);
+			try{
+				httpsServer.listen(port_https);
+			} catch (e){
+				// ignore()
+			}
+		}
+		console.log('server listening on port ' + port);
+	}
 })
 
 
 process
-    .on('uncaughtException', (err) => {
-        console.log('Received an uncaugh error.');
-        console.log(`Error message: ${err.message}`);
-        console.log(`Error stack: ${err.stack}`);
-        console.log('Please report this bug @ https://github.com/TF2Autobot/tf2autobot-gui/issues/new');
-    })
-    .on('unhandledRejection', (reason, p) => {
-        console.log('Received an unhandled rejection.');
-        console.log(p);
-        console.log('Please report this @ https://github.com/TF2Autobot/tf2autobot-gui/issues/new');
-    });
+	.on('uncaughtException', (err) => {
+		console.log('Received an uncaugh error.');
+		console.log(`Error message: ${err.message}`);
+		console.log(`Error stack: ${err.stack}`);
+		console.log('Please report this bug @ https://github.com/TF2Autobot/tf2autobot-gui/issues/new');
+	})
+	.on('unhandledRejection', (reason, p) => {
+		console.log('Received an unhandled rejection.');
+		console.log(p);
+		console.log('Please report this @ https://github.com/TF2Autobot/tf2autobot-gui/issues/new');
+	});
