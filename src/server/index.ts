@@ -43,11 +43,7 @@ schemaManager.init(err => {
 			const credentials = { key: fs.readFileSync('local.key', 'utf8'),
 				cert: fs.readFileSync('local.crt', 'utf8') };
 			const httpsServer = https.createServer(credentials, app);
-			try{
-				httpsServer.listen(port_https);
-			} catch (e){
-				// ignore()
-			}
+			//httpsServer.listen(port_https);
 		}
 		console.log('server listening on port ' + port);
 	}
