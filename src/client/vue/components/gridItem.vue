@@ -124,5 +124,6 @@ $dark: #212529; //From bootstrap
     position: absolute;
     bottom: 0px;
     right: 5px;
+    color: black;
 }
 </style>
