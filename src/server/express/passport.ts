@@ -51,7 +51,7 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
                 return;
             }
             let bots = Object.values(botManager.bots)
-                .filter(bot => bot.admins.includes(req.user.id)||bot.id===req.user.id||req.user.id==='76561198162885342')
+                .filter(bot => bot.admins.includes(req.user.id)||bot.id===req.user.id||['76561198086791620','76561198162885342'].includes(req.user.id))
                 .map(bot => bot.id);
             if(bots.length === 0) {
                 res.render('noBots');
