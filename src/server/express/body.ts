@@ -9,7 +9,7 @@ export = function init(app: Express): void {
         }))
         .use(session({
             secret: 'your secret',
-            name: 'name of session id',
+            name: 'sessionID',
             resave: true,
             saveUninitialized: true }))
 }
