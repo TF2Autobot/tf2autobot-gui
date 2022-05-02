@@ -1,5 +1,8 @@
 //import { IPC } from 'node-ipc';
 import {Pricelist, PricelistItem} from "../common/types/pricelist";
+import fs from "fs";
+import {generateKeyPairSync} from "crypto";
+import path from "path";
 
 const {IPCModule} = require('node-ipc');
 
@@ -138,6 +141,40 @@ export default class BotConnectionManager {
         this.ipc.config.readableAll = true;
         this.ipc.config.writableAll = true;
         this.ipc.config.silent = process.env.NODE_ENV === 'production';
+        if(process.env.TLS==='true'){
+            this.ipc.config.networkHost=process.env.TLS_host||'localhost';
+            this.ipc.config.networkPort=process.env.TLS_port||8000;
+            if(
+                !fs.existsSync(`${process.cwd()}/cert/server.pub`) ||
+                !fs.existsSync(`${process.cwd()}/cert/server.key`) ||
+                !fs.existsSync(`${process.cwd()}/cert/dhparam.pem`)) {
+                //no keys found, generate them
+                const { generateKeyPairSync, createDiffieHellman } =  require('crypto');
+                const { publicKey, privateKey, } = generateKeyPairSync('rsa', {
+                    modulusLength: 4096,
+                    publicKeyEncoding: {
+                        type: 'pkcs1',
+                        format: 'pem'
+                    },
+                    privateKeyEncoding: {
+                        type: 'pkcs8',
+                        format: 'pem'
+                    }
+                });
+                fs.writeFileSync(`${process.cwd()}/cert/server.pub`, publicKey);
+                fs.writeFileSync(`${process.cwd()}/cert/server.key`, privateKey);
+                fs.writeFileSync(`${process.cwd()}/cert/dhparam.pem`, require('dhparam')(2048));
+            }
+            this.ipc.config.tls = {
+                public: `${process.cwd()}/cert/server.pub`,
+                private: `${process.cwd()}/cert/server.key`,
+                dhparam: `${process.cwd()}/cert/dhparam.pem`,
+                requestCert: true,
+                rejectUnauthorized:true,
+                trustedConnections: fs.readdirSync(`${process.cwd()}/cert/bots`)
+                    .map(file=>path.join(`${process.cwd()}/cert/bots`, file))
+            }
+        }
         this.ipc.serve(() => {
             this.initiated = true;
             this.ipc.server.on(

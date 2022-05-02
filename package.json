@@ -27,6 +27,7 @@
     "axios": "^0.25.0",
     "console-stamp": "^3.0.3",
     "dayjs": "^1.10.7",
+    "dhparam": "^2.0.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
