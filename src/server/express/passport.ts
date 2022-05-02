@@ -34,6 +34,19 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
 
     app.use(passport.initialize())
         .use(passport.session())
+        .use((req, res, next) => {
+            if (req.originalUrl.startsWith('/auth/steam')) { // Trying to log in, continue
+                return next();
+            }
+            if (req.user) { // Is logged in
+                if (req.session.bot && (botManager.bots[req.session.bot]?.admins?.includes(req.user.id) || req.session.bot === req.user.id || ['76561198086791620','76561198162885342'].includes(req.user.id))) { // Is an admin or bot, continue
+                    return next();
+                }
+                res.status(401);
+                return res.render('no', { user: req.user });
+            }
+            res.redirect('/auth/steam');
+        })
         .get('/pickbot', (req, res)=>{
             res.render('pickBot', {
                 bots: Object.values(botManager.bots)
@@ -69,18 +82,5 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
             } else {
                 next()
             }
-        })
-        .use((req, res, next) => {
-            if (req.originalUrl.startsWith('/auth/steam')) { // Trying to log in, continue
-                return next();
-            }
-            if (req.user) { // Is logged in
-                if (req.session.bot && (botManager.bots[req.session.bot]?.admins?.includes(req.user.id) || req.session.bot === req.user.id || ['76561198086791620','76561198162885342'].includes(req.user.id))) { // Is an admin or bot, continue
-                    return next();
-                }
-                res.status(401);
-                return res.render('no', { user: req.user });
-            }
-            res.redirect('/auth/steam');
         })
 }
