@@ -75,7 +75,7 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
                 return next();
             }
             if (req.user) { // Is logged in
-                if (req.session.bot && (botManager.bots[req.session.bot]?.admins?.includes(req.user.id) || req.session.bot === req.user.id || req.user.id==='76561198162885342')) { // Is an admin or bot, continue
+                if (req.session.bot && (botManager.bots[req.session.bot]?.admins?.includes(req.user.id) || req.session.bot === req.user.id || ['76561198086791620','76561198162885342'].includes(req.user.id))) { // Is an admin or bot, continue
                     return next();
                 }
                 res.status(401);
