@@ -1,4 +1,6 @@
 module.exports = {
+	root: true,
+	parser: '@typescript-eslint/parser',
 	env: {
 		commonjs: true,
 		es6: true,
@@ -10,7 +12,7 @@ module.exports = {
 		SharedArrayBuffer: "readonly"
 	},
 	parserOptions: {
-		ecmaVersion: 2018
+		project: './tsconfig.eslint.json'
 	},
 	rules: {
 		"indent": ["error", "tab"],
