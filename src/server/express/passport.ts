@@ -3,6 +3,10 @@ import StrategyPassport from 'passport-steam';
 import { Express } from "express";
 import BotConnectionManager from "../IPC";
 
+function filterBots(bot){
+    return bot.admins.includes(this.user.id)||bot.id===this.user.id||['76561198086791620','76561198162885342'].includes(this.user.id)
+}
+
 export =  function init(app: Express, botManager: BotConnectionManager): void {
     let port = process.env.PORT ? process.env.PORT : 3000;
     let ip = process.env.ADDRESS;
@@ -39,6 +43,23 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
                 return next();
             }
             if (req.user) { // Is logged in
+                let bots = Object.values(botManager.bots)
+                    .filter(filterBots.prototype.bind(req))
+                    .map(bot => bot.id);
+                if(bots.length === 0) {
+                    res.render('noBots');
+                    return;
+                }
+                if(!req.session.bot) {
+                    if(bots.length == 1) {
+                        req.session.bot = bots[0];
+                        next();
+                    } else {
+                        res.render('pickBot', {
+                            bots: bots
+                        });
+                    }
+                }
                 if (req.session.bot && (botManager.bots[req.session.bot]?.admins?.includes(req.user.id) || req.session.bot === req.user.id || ['76561198086791620','76561198162885342'].includes(req.user.id))) { // Is an admin or bot, continue
                     return next();
                 }
@@ -57,30 +78,5 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
         .post('/pickbot', (req,res)=>{
             req.session.bot = req.body.bot;
             res.redirect(301, '/');
-        })
-        .use((req, res, next) => {
-            if(!req.user) {
-                next();
-                return;
-            }
-            let bots = Object.values(botManager.bots)
-                .filter(bot => bot.admins.includes(req.user.id)||bot.id===req.user.id||['76561198086791620','76561198162885342'].includes(req.user.id))
-                .map(bot => bot.id);
-            if(bots.length === 0) {
-                res.render('noBots');
-                return;
-            }
-            if(!req.session.bot) {
-                if(bots.length == 1) {
-                    req.session.bot = bots[0];
-                    next();
-                } else {
-                    res.render('pickBot', {
-                        bots: bots
-                    });
-                }
-            } else {
-                next()
-            }
         })
 }
