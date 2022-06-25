@@ -44,7 +44,7 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
             }
             if (req.user) { // Is logged in
                 let bots = Object.values(botManager.bots)
-                    .filter(filterBots.prototype.bind(req))
+                    .filter(filterBots.bind(req))
                     .map(bot => bot.id);
                 if(bots.length === 0) {
                     res.render('noBots');
@@ -53,9 +53,9 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
                 if(!req.session.bot) {
                     if(bots.length == 1) {
                         req.session.bot = bots[0];
-                        next();
+                        return next();
                     } else {
-                        res.render('pickBot', {
+                        return res.render('pickBot', {
                             bots: bots
                         });
                     }

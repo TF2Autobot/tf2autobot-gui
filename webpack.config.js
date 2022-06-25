@@ -15,7 +15,8 @@ module.exports = {
 	entry: {
 		index: './src/client/index.ts',
 		base: './src/client/base.ts',
-		trades: './src/client/trades.ts'
+		trades: './src/client/trades.ts',
+		config: './src/client/config.ts'
 	},
 	resolve: {
 		// Add `.ts` as a resolvable extension.

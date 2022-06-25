@@ -1,0 +1,4 @@
+{% extends 'templates/base.njk' %}
+{% block stylesheets %}{{ load_entry_tags('config', 'css') | safe}}{% endblock %}
+
+{% block javascripts %} {{ load_entry_tags('config', 'js') | safe}} {% endblock %}
