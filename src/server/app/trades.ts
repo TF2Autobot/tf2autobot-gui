@@ -29,9 +29,9 @@ export async function get(first: number, count: number, descending: boolean, sea
         b = b.finishTimestamp;
 
         // check for undefined time, sort those at the end
-        if ( (!a || isNaN(a)) && !(!b || isNaN(b))) {return 1;}
-        if ( !(!a || isNaN(a)) && (!b || isNaN(b))) {return -1;}
-        if ( (!a || isNaN(a)) && (!b || isNaN(b))) {return 0;}
+        if ( (!a || isNaN(a)) && !(!b || isNaN(b))) return 1;
+        if ( !(!a || isNaN(a)) && (!b || isNaN(b))) return -1;
+        if ( (!a || isNaN(a)) && (!b || isNaN(b))) return 0;
 
         if (descending) {
             b = [a, a = b][0];
@@ -40,7 +40,7 @@ export async function get(first: number, count: number, descending: boolean, sea
         return a - b;
     });
     tradeList = tradeList.filter((offer) => {
-        if(!search) {return true;}
+        if(!search) return true;
         let offerSearchResults = false;
         if (Object.prototype.hasOwnProperty.call(offer, 'dict')) {
             offerSearchResults = [].concat(Object.keys(offer.dict.our), Object.keys(offer.dict.their)).some(item => {
