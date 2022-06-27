@@ -6,3 +6,4 @@ config/*
 data
 dist
 public/build
+.DS_Store

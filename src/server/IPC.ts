@@ -146,7 +146,10 @@ export default class BotConnectionManager {
                     if (!this.bots[data.id]) {
                         console.log('bot id ' + data.id);
                         socket.id = data.id;
-                        this.bots[data.id] = {socket, ...data};
+                        this.bots[data.id] = {
+                            socket,
+                            ...data
+                        };
                     }
                 }
             );
