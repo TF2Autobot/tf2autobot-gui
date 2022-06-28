@@ -14,7 +14,7 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
         } catch (e) {
             console.error(e);
         }
-        if(!pricelist) res.json([]);
+        if(!pricelist) return res.json([]);
         pricelist = Object.values(pricelist);
         for (let i = 0; i < pricelist.length; i++) {
             const item = pricelist[i];
