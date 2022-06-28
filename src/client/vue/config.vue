@@ -4,11 +4,9 @@
     </div>
 </template>
 
-<script lang="ts">
-export default {
-    name: 'config.vue',
-
-}
+<script setup lang="ts">
+    let x: string | number = 1;
+    console.log(".");
 </script>
 
 <style>
