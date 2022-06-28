@@ -8,7 +8,7 @@ function filterBots(bot){
 }
 
 export =  function init(app: Express, botManager: BotConnectionManager): void {
-    let port = process.env.PORT ? process.env.SSL ? process.env.PORT_HTTPS : process.env.PORT : 3000;
+    let port = process.env.PORT ? process.env.SSL === 'true' ? process.env.PORT_HTTPS : process.env.PORT : 3000;
     let ip = process.env.ADDRESS;
 
     if (isNaN(+port)) {
@@ -24,7 +24,7 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
     passport.deserializeUser(function(obj, done) {
         done(null, obj);
     });
-    const portString = process.env.SSL ?
+    const portString = process.env.SSL === 'true' ?
         port == 443 ? '' : `:${port}`
         :
         port == 80 ? '' : `:${port}`

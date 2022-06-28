@@ -37,7 +37,7 @@ schemaManager.init(err => {
         console.log('Schema manager failed to init, with error: ' + err)
     } else {
         initApp(app, schemaManager, botConnectionManager);
-        if(process.env.SSL) {
+        if(process.env.SSL === 'true') {
             const credentials = {
                 key: fs.readFileSync('local.key', 'utf8'),
                 cert: fs.readFileSync('local.crt', 'utf8')
@@ -48,7 +48,7 @@ schemaManager.init(err => {
             const httpServer = http.createServer(app);
             httpServer.listen(port);
         }
-        console.log(`server listening on port ${process.env.SSL ? portHttps : port}`);
+        console.log(`server listening on port ${process.env.SSL === 'true' ? portHttps : port}`);
     }
 })
 
