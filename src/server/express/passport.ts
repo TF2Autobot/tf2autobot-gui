@@ -8,7 +8,7 @@ function filterBots(bot){
 }
 
 export =  function init(app: Express, botManager: BotConnectionManager): void {
-    let port = process.env.PORT ? process.env.PORT : 3000;
+    let port = process.env.PORT ? process.env.SSL === 'true' ? process.env.PORT_HTTPS : process.env.PORT : 3000;
     let ip = process.env.ADDRESS;
 
     if (isNaN(+port)) {
@@ -24,17 +24,22 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
     passport.deserializeUser(function(obj, done) {
         done(null, obj);
     });
-    passport.use(new SteamStrategy({
-            returnURL: process.env.VPS == 'true' ? `http${process.env.SSL=='true'?'s':''}://${ip}${process.env.SSL=='true'? '': `:${port}`}/auth/steam/return` : `http://127.0.0.1:${port}/auth/steam/return`,
-            realm: process.env.VPS == 'true' ? `http${process.env.SSL=='true'?'s':''}://${ip}${process.env.SSL=='true'? '': `:${port}`}/` : `http://127.0.0.1:${port}/`,
+    const portString = process.env.SSL === 'true' ?
+        port == 443 ? '' : `:${port}`
+        :
+        port == 80 ? '' : `:${port}`
+    const address = `http${process.env.SSL=='true'?'s':''}://${process.env.VPS == 'true' ? ip : '127.0.0.1'}${portString}`;
+    passport.use(new SteamStrategy(
+        {
+            returnURL: `${address}/auth/steam/return`,
+            realm: `${address}/`,
             apiKey: process.env.API_KEY
         },
         function(identifier, profile, done) {
             // Always return profile, dont want constant logins if not an admin
             profile.identifier = identifier;
             return done(null, profile);
-        }
-    ));
+        }));
 
     app.use(passport.initialize())
         .use(passport.session())

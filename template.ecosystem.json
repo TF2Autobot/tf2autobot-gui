@@ -1,0 +1,30 @@
+{
+  "apps": [
+    {
+      "name": "GUI",
+      "script": "dist/server.js",
+      "exec_mode": "fork",
+      "shutdown_with_message": false,
+      "max_memory_restart": "1500M",
+      "kill_retry_time": 30000,
+      "kill_timeout": 60000,
+      "env": {
+        "NODE_ENV": "production",
+
+        "API_KEY": "",
+        "STEAM_AUTH": true,
+        "PORT": "80",
+        "PORT_HTTPS": "443",
+
+        "SSL": false,
+        "VPS": true,
+
+        "ADDRESS": "localhost",
+
+        "TLS": false,
+        "TLS_host": "",
+        "TLS_port": ""
+      }
+    }
+  ]
+}
