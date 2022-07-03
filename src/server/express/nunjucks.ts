@@ -13,10 +13,13 @@ export = function init(app: Express): void {
             const webpack = require(path.join(process.cwd(), 'webpack.config.js'))
             let entrypoints = fs.readJsonSync(path.join(webpack.output.path, './manifest.json'));
             if (!entrypoints[entrypoint]) return '';
-            return entrypoints[entrypoint]
+            const files = entrypoints[entrypoint]
                 .filter(e => {
-                    return e.endsWith(type);
-                })
+                    return e.endsWith(type) && !this.loaded?.has?.(e);
+                });
+            if(!this.loaded) this.loaded = new Set(files);
+            else files.forEach(file => this.loaded.add(file));
+            return files
                 .map((e) => path.join(webpack.output.publicPath, e))
                 .map((e) => {
                     return type == 'js' ? `<script src="${e}" defer></script>` : `<link rel="stylesheet" href="${e}">`
