@@ -1,6 +1,7 @@
 import * as Vue from 'vue';
 import index from './vue/config.vue';
 
+
 Vue.createApp(index).mount(
     '#app'
 )
