@@ -1,13 +1,42 @@
 <template>
-    <div>
+    <div class="container">
         <h1> config </h1>
-        <ul v-for="item in items"
-            :key = item
-            :style="{'margin-left': `${depth * 20}px`}">
-            <li>
-                {{item}}
-             </li>
-        </ul>
+
+        <div v-for="item in items.slice(1)"
+            :key="item.id"
+            :id="item.id"
+            class="row"
+        >
+
+            <h5  :style="{'margin-left': `${item.depth * 30}px`}" class="col-sm lh-lg">
+                {{item.key}} <br>
+            </h5>
+
+            <h5 class="col-sm text-muted lh-lg">
+                {{item.data}}
+            </h5>
+            
+            <div class="col">
+                <div v-if="item.type === 'checkbox'">
+                    <input type="checkbox" v-model="item.data" />
+                </div>
+                
+                <div v-else-if="item.type === 'number'">
+                    <input type="number" v-model="item.data" />
+                </div>
+
+                <div v-else-if="item.type === 'text'">
+                    <input type="text" v-model="item.data" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="position-relative">
+            <div class="position-fixed bottom-30 start-90">
+                <button type="button" class="btn btn-success">Send</button>
+            </div>
+        </div>
       </div>
 </template>
 
@@ -16,19 +45,14 @@
 </style>
 
 <script lang="ts">
-    import treeBrowser from "./components/treeBrowser.vue";
     export default {
-        name: "config.vue",
+      name: "config.vue",
         data(){
             return{
                 index: 0,
-                typ: "",
-                items: [{}],
                 depth: 0,
+                items: [{}],
             };
-        },
-        components:{
-            treeBrowser
         },
         methods: {
                 getJson(){
@@ -37,48 +61,53 @@
                             return response.json();
                         })
                         .then((data) => {
-                            this.flatJson(data, '');
                             this.runThruData(data);
+                            
                         })
                         .catch((error) => {
                             console.error('Error: ', error);
                         });
                 },
-                flatJson(entry:object, parrent:string){  
-                    for(const [key, item] of Object.entries(entry)){
-                        this.index ++;
-                        if(typeof item  === 'object'){
-                            this.flatJson(item, key);  
-                        } else {
-                            // if(typeof item === 'number'){
-                            //     this.typ = "cislo";
-                            // } else if (typeof item === 'string'){
-                            //     this.typ = "text"
-                            // }
-                            
-                            this.items.push(parrent); 
-                            console.log(parrent + ' ' + this.index + ' : ' + key+' : '+ item + ' : ' + this.typ);
-                        }     
-                    }
-                },
                 runThruData(jsonObject:object){
-                    for(const [key, item] of Object.entries(jsonObject)){
-                        if (typeof item === 'object'){
-                            console.log(this.depth+ ':'+key);
+                    for(const [key, item] of Object.entries(jsonObject)){     
+                       if (typeof item === 'object'){
+                            this.items.push({
+                                key: key, 
+                                depth: this.depth, 
+                                type: "none",
+                                data: ""
+                            });
                             this.depth++;
                             this.runThruData(item);
                         } else {
-                            console.log(this.depth+ ':->' +key+' : '+item)
+                            this.items.push({
+                                key: key, 
+                                depth: this.depth, 
+                                type: this.whichType(item),
+                                data: item
+                        });
                         }
                     }
-                this.depth--; 
+                    this.depth--; 
+                },
+                whichType(type:boolean):string{
+                    if(type === false || type === true){
+                        return 'checkbox';
+                    }else if(typeof type === 'number'){
+                        return 'number';
+                    }
+                    else {
+                        return 'text';
+                    }
                 },
         },
+        
         mounted(){
             this.getJson();
         },
     };
-</script>
+</script>   
+
 
 <style scoped>
     
