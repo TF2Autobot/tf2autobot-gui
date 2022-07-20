@@ -1,10 +1,12 @@
 //import { IPC } from 'node-ipc';
 import { Pricelist, PricelistItem } from "../common/types/pricelist";
+import { BotOptions } from "../common/types/options"
+
 
 const { IPCModule } = require('node-ipc');
 
 export default class BotConnectionManager {
-    bots: { [id: string]: { socket: any, pricelistTS?: number, pricelist?: Pricelist, admins?: string[], id: string } };
+    bots: { [id: string]: { socket: any, pricelistTS?: number, pricelist?: Pricelist, options: BotOptions, admins?: string[], id: string } };
 
     private initiated: boolean;
 
@@ -14,6 +16,16 @@ export default class BotConnectionManager {
         this.ipc = new IPCModule;
         this.bots = {};
         this.initiated = false;
+    }
+
+    private getOptions(socket, callback?) {
+        this.ipc.server.emit(
+            socket,
+            'getOptions'
+        );
+        if(callback){
+            this.ipc.server.once('options', callback);
+        }
     }
 
     private getPricelist(socket, callback?) {
@@ -59,6 +71,16 @@ export default class BotConnectionManager {
                 resolve(this.bots[id].pricelist);
             } else {
                 this.getPricelist(this.bots[id].socket, (data)=>{
+                    resolve(data);
+                });
+            }
+        });
+    }
+    getBotOptions(id: string) {
+        return new Promise<undefined | Pricelist>((resolve, reject) => {
+            if(!this.bots[id]) reject("no bot found");
+            else {
+                this.getOptions(this.bots[id].socket, (data) => {
                     resolve(data);
                 });
             }
