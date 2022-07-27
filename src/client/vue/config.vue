@@ -31,7 +31,7 @@ export default {
     },
     methods: {
         getJson(){
-            fetch('https://adams-demo-default-rtdb.europe-west1.firebasedatabase.app/options.json')
+            fetch('/config/options')
                 .then((response) => {
                     return response.json();
                 })

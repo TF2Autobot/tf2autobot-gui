@@ -7,6 +7,9 @@ export default function config(schemaManager: SchemaManager, botManager: BotConn
     router.get('/', async (req, res) => {
         res.render('config');
     });
+    router.get('/options', async (req, res) => {
+        res.json(await botManager.getOptions(req.session.bot));
+    });
     router.post('/', async (req, res) => {
         const object = {};
         for(const key in req.body) {
@@ -28,7 +31,7 @@ export default function config(schemaManager: SchemaManager, botManager: BotConn
                 lastKey=key;
             }
             if(lastKey) {
-                obj[lastKey]=val;
+                obj[lastKey]=isNaN(val) ? val : +val;
             } else {
                 console.error('LastKey not set ?');
             }

@@ -64,16 +64,15 @@ export default class BotConnectionManager {
             }
         });
     }
-    getItem(id: string, item: object){
+    getOptions(id: string){
         return new Promise<undefined | PricelistItem>((resolve, reject)=>{
             if(!this.bots[id]) reject("no bot found");
             else {
                 this.ipc.server.emit(
                     this.bots[id].socket,
-                    `getItem`,
-                    BotConnectionManager.cleanItem(item)
+                    `getOptions`
                 );
-                this.ipc.server.once('itemOptions', resolve);
+                this.ipc.server.once('options', resolve);
             }
         })
     }
