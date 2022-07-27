@@ -4,14 +4,24 @@
         key="key"
         :style="{
             'border-left': `#29a30e solid ${10-level*2}px`}">
-        <component :is="typeof value === 'object' ? 'recursive-option' : 'label'"
+        <component :is="isObject(value) ? 'recursive-option' : 'label'"
                    :for="key"
                    :level="level+1"
-                   :data="typeof value === 'object' ? value : undefined"
-                   :parent="typeof value === 'object' ? newParent(key) : undefined">
+                   :data="isObject(value) ? value : undefined"
+                   :parent="isObject(value) ? newParent(key) : undefined">
             {{key}}
         </component>
-        <input v-if="typeof value !== 'object'" :id="newParent(key)" :name="newParent(key)" :type="getType(value)" :value="getType(value) === 'checkbox' ? 'true' : value" :checked="getType(value) === 'checkbox' ? value : false">
+        <input v-if="!isObject(value)" :id="newParent(key)" :name="newParent(key)" :type="getType(value)" value="{{getType(value) === 'checkbox' ? 'true' : vals[key] = value}}" :checked="getType(value) === 'checkbox' ? value : false" v-model="vals[key]">
+        <input type='hidden' v-if="
+            !isObject(value) &&
+            getType(value) === 'checkbox' &&
+            (
+                vals[key]==false ||
+                (
+                    typeof vals[key] === 'undefined' &&
+                    value==false
+                )
+            )" :name="newParent(key)" value="false">
     </div>
 </template>
 
@@ -19,6 +29,12 @@
 export default {
     name: 'recursive-option',
     props: ['for', 'level', 'data', 'parent'],
+    data: function () {
+        return {
+            vals: this.data,
+            console
+        }
+    },
     methods: {
         getType(value) {
             switch (typeof value) {
@@ -28,12 +44,17 @@ export default {
                     return 'number';
                 case 'string':
                     return 'text';
+                case 'object'://
+                    if(Array.isArray(value)) return 'button';
                 default:
                     return 'button';
             }
         },
+        isObject(value) {
+            return typeof value === 'object' && !Array.isArray(value);
+        },
         newParent(key){
-            return this.parent ? `${this.parent}.${key}` : key;
+            return this.parent ? `${this.parent}$${key}` : key;
         }
     }
 };

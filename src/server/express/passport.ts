@@ -63,9 +63,7 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
                         req.session.bot = bots[0];
                         return next();
                     } else {
-                        return res.render('pickBot', {
-                            bots: bots
-                        });
+                        return res.redirect('/pickbot');
                     }
                 }
                 if (req.session.bot && (filterBots.bind(req) )(botManager.bots[req.session.bot])) { // Is an admin or bot, continue
@@ -84,7 +82,10 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
             res.render('pickBot', {
                 bots: Object.values(botManager.bots)
                     .filter(filterBots.bind(req))
-                    .map(bot => bot.id)
+                    .reduce((acc, bot) => {
+                        acc[bot.id]=bot.name;
+                        return acc;
+                    }, {})
             });
         })
         .post('/pickbot', (req,res) => {

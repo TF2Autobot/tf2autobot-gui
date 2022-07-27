@@ -9,8 +9,8 @@
         <select name="bot" id="bot-select">
             <option value="" disabled selected>--Please choose a bot--</option>
 
-            {% for id in bots %}
-                <option value="{{ id }}">{{ id }}</option>
+            {% for id, name in bots %}
+                <option value="{{ id }}">{{ name }}({{ id }})</option>
 
             {% endfor %}
         </select>
