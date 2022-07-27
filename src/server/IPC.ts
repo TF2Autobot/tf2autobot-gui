@@ -4,7 +4,7 @@ import { Pricelist, PricelistItem } from "../common/types/pricelist";
 const { IPCModule } = require('node-ipc');
 
 export default class BotConnectionManager {
-    bots: { [id: string]: { socket: any, pricelistTS?: number, pricelist?: Pricelist, admins?: string[], id: string } };
+    bots: { [id: string]: { socket: any, pricelistTS?: number, pricelist?: Pricelist, admins?: string[], id: string, name: string} };
 
     private initiated: boolean;
 
