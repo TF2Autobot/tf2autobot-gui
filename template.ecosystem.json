@@ -23,7 +23,9 @@
 
         "TLS": false,
         "TLS_host": "",
-        "TLS_port": ""
+        "TLS_port": "",
+        "CERT_FILE": "",
+        "CERT_KEY": ""
       }
     }
   ]
