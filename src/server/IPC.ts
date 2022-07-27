@@ -53,19 +53,19 @@ export default class BotConnectionManager {
     }
 
     getBotPricelist(id: string) {
-        return new Promise<undefined | Pricelist>((resolve, reject)=>{
+        return new Promise<undefined | Pricelist>((resolve, reject) => {
             if(!this.bots[id]) reject("no bot found");
             else if(this.bots[id].pricelistTS > Date.now() - 15*1000) {
                 resolve(this.bots[id].pricelist);
             } else {
-                this.getPricelist(this.bots[id].socket, (data)=>{
+                this.getPricelist(this.bots[id].socket, (data) => {
                     resolve(data);
                 });
             }
         });
     }
     getOptions(id: string){
-        return new Promise<undefined | PricelistItem>((resolve, reject)=>{
+        return new Promise<undefined | PricelistItem>((resolve, reject) => {
             if(!this.bots[id]) reject("no bot found");
             else {
                 this.ipc.server.emit(
@@ -76,8 +76,21 @@ export default class BotConnectionManager {
             }
         })
     }
+    updateOptions(id: string, options: object){
+        return new Promise<undefined | PricelistItem>((resolve, reject) => {
+            if(!this.bots[id]) reject("no bot found");
+            else {
+                this.ipc.server.emit(
+                    this.bots[id].socket,
+                    `updateOptions`,
+                    options
+                );
+                this.ipc.server.once('optionsUpdated', resolve);
+            }
+        })
+    }
     addItem(id: string, item: object) {
-        return new Promise<undefined | PricelistItem>((resolve, reject)=>{
+        return new Promise<undefined | PricelistItem>((resolve, reject) => {
             if(!this.bots[id]) reject("no bot found");
             else {
                 this.ipc.server.emit(
@@ -90,7 +103,7 @@ export default class BotConnectionManager {
         });
     }
     updateItem(id: string, item: object) {
-        return new Promise<undefined | PricelistItem>((resolve, reject)=>{
+        return new Promise<undefined | PricelistItem>((resolve, reject) => {
             if(!this.bots[id]) reject("no bot found");
             else {
                 this.ipc.server.emit(
@@ -103,7 +116,7 @@ export default class BotConnectionManager {
         });
     }
     removeItem(id: string, sku: string) {
-        return new Promise<undefined | PricelistItem>((resolve, reject)=>{
+        return new Promise<undefined | PricelistItem>((resolve, reject) => {
             if(!this.bots[id]) reject("no bot found");
             else {
                 this.ipc.server.emit(
