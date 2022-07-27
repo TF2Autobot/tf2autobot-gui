@@ -1,4 +1,4 @@
-import { Express } from "express";
+import {Express} from "express";
 import SchemaManager from "@tf2autobot/tf2-schema";
 import BotConnectionManager from "../IPC";
 

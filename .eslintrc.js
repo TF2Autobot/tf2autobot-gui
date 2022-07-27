@@ -1,20 +1,17 @@
 module.exports = {
     root: true,
-    parser: "vue-eslint-parser",
+    parser: '@typescript-eslint/parser',
     env: {
         commonjs: true,
         es6: true,
         node: true
     },
-    extends: [
-        'plugin:vue/vue3-recommended'
-    ],
+    extends: [],
     globals: {
         Atomics: 'readonly',
         SharedArrayBuffer: 'readonly'
     },
     parserOptions: {
-        parser: "@typescript-eslint/parser",
         project: './tsconfig.eslint.json'
     },
     rules: {
