@@ -83,7 +83,7 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
         .get('/pickbot', (req, res) => {
             res.render('pickBot', {
                 bots: Object.values(botManager.bots)
-                    .filter(bot => bot.admins.includes(req.user.id))
+                    .filter(filterBots.bind(req))
                     .map(bot => bot.id)
             });
         })
