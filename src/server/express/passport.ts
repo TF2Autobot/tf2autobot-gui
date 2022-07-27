@@ -65,7 +65,7 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
                         });
                     }
                 }
-                if (req.session.bot && filterBots.bind(req)(req.session.bot)) { // Is an admin or bot, continue
+                if (req.session.bot && (filterBots.bind(req) )(botManager.bots[req.session.bot])) { // Is an admin or bot, continue
                     return next();
                 } else if (bots.length > 0) { // we are trying to control different bot, but we have bots avaliable
                     return res.render('pickBot', {
