@@ -4,7 +4,7 @@
             <h1>Config</h1>
             <div v-for="(value, key) of options"
                  :key="key">
-                <recursive-option :for="key" :level="2" :data="value"></recursive-option>
+                <recursive-option :for="key" :level="2" :data="value" :parent="key"></recursive-option>
             </div>
             <div class="text-center">
                 <input type="submit" value="Save Changes">
@@ -42,7 +42,16 @@ export default {
                 .catch((error) => {
                     console.error('Error: ', error);
                 });
-        },
+        }/*,
+        save(){
+            fetch('/config', {
+                method:'post',
+                body: JSON.stringify(this.options),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }*/
     },
 
     mounted(){

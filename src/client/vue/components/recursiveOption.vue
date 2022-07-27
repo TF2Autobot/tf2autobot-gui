@@ -11,7 +11,7 @@
                    :parent="typeof value === 'object' ? newParent(key) : undefined">
             {{key}}
         </component>
-        <input v-if="typeof value !== 'object'" :id="newParent(key)" :type="getType(value)" :value="getType(value) === 'checkbox' ? 'true' : value" :checked="getType(value) === 'checkbox' ? value : false">
+        <input v-if="typeof value !== 'object'" :id="newParent(key)" :name="newParent(key)" :type="getType(value)" :value="getType(value) === 'checkbox' ? 'true' : value" :checked="getType(value) === 'checkbox' ? value : false">
     </div>
 </template>
 
