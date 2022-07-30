@@ -85,7 +85,7 @@ export default {
     methods: {
         loadTrades(first=0, count=50) {
             this.loadLock = true;
-            fetch(`?first=${first}&count=${count}&dir=${this.order}&search=${encodeURIComponent(this.search)}`, {headers: {
+            fetch(`?first=${first}&count=${count}&dir=${this.order}&search=${encodeURIComponent(this.search)}&acceptedOnly=${this.acceptedOnly ? '1': '0'}`, {headers: {
                     'Accept': 'application/json',
                 }})
                 .then((response) => {
@@ -118,7 +118,7 @@ export default {
                 console.log('onscroll called');
                 const bottomOfWindow = Math.max(window.scrollY, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight === document.documentElement.offsetHeight;
                 if (bottomOfWindow&&!this.loadLock&& this.toShow < this.tradeCount) {
-                    const nuberToAdd = 50;
+                    const nuberToAdd = 25;
                     this.loadTrades(this.toShow, nuberToAdd);
                     this.toShow += nuberToAdd;
                 }
@@ -127,9 +127,14 @@ export default {
     },
     watch: {
         order: function() {
+            this.toShow = 50;
             this.loadTrades(0, this.toShow);
         },
         search: function() {
+            this.loadTrades(0, this.toShow);
+        },
+        acceptedOnly: function () {
+            this.toShow = 50;
             this.loadTrades(0, this.toShow);
         }
     },

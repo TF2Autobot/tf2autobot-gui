@@ -2,7 +2,7 @@ import path from "path";
 import dotenv from 'dotenv';
 dotenv.config({ path: path.join(process.cwd(), '.env') });
 
-require( 'console-stamp' )( console );
+//require( 'console-stamp' )( console );
 
 import express from 'express';
 import initApp from './express/init';

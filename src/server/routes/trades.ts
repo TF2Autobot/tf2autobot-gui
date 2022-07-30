@@ -17,7 +17,7 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
             });
         } else if(req.accepts('application/json')){
             const polldata = await botManager.getTrades(req.session.bot);
-            trades.get(Number(req.query.first)||0, Number(req.query.count)||50, Number(req.query.dir)==1, (req.query.search ?? '') as string, schema, polldata)
+            trades.get(Number(req.query.first)||0, Number(req.query.count)||50, Number(req.query.dir)==1, (req.query.search ?? '') as string, +req.query.acceptedOnly===1, schema, polldata)
                 .then((data) => {
                     res.json({
                         success: 1,

@@ -12,10 +12,11 @@ import SchemaManager from "@tf2autobot/tf2-schema";
  * @param {Number} count how many trades to include in results, set to -1 to return all
  * @param {Boolean} descending sort
  * @param {String} search string to search listings for
+ * @param {Boolean} acceptedOnly
  * @param schema
  * @param polldata
  */
-export async function get(first: number, count: number, descending: boolean, search: string, schema: SchemaManager.Schema, polldata: any) {
+export async function get(first: number, count: number, descending: boolean, search: string, acceptedOnly: boolean, schema: SchemaManager.Schema, polldata: any) {
     search = search.trim().toLowerCase();
     const profitData = (await profit.get(undefined, undefined, undefined, polldata, true)).tradeProfits;
     let tradeList = Object.keys(polldata?.offerData || {}).map((key) => {
@@ -39,14 +40,14 @@ export async function get(first: number, count: number, descending: boolean, sea
         return a - b;
     });
     tradeList = tradeList.filter((offer) => {
-        if(!search) {return true;}
+        if(!search) {return (offer.isAccepted || !acceptedOnly);}
         let offerSearchResults = false;
         if (Object.prototype.hasOwnProperty.call(offer, 'dict')) {
             offerSearchResults = [].concat(Object.keys(offer.dict.our), Object.keys(offer.dict.their)).some(item => {
                 return getName(SKU.fromString(item), schema).toLowerCase().indexOf(search) > -1;
             });
         }
-        return offer.partner?.indexOf(search) > -1 || offerSearchResults;
+        return (offer.partner?.indexOf(search) > -1 || offerSearchResults) && (offer.isAccepted || !acceptedOnly);
     });
     const tradeCount = tradeList.length;
     tradeList = tradeList.slice(first, count >= 0 ? first + count : undefined);
