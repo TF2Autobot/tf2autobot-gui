@@ -23,15 +23,14 @@ export async function get(first: number, count: number, descending: boolean, sea
         ret.id = key;
         return ret;
     });
-	const tradeCount = tradeList.length;
     tradeList = tradeList.sort((a, b) => {
         a = a.finishTimestamp;
         b = b.finishTimestamp;
 
         // check for undefined time, sort those at the end
-        if ( (!a || isNaN(a)) && !(!b || isNaN(b))) return 1;
-        if ( !(!a || isNaN(a)) && (!b || isNaN(b))) return -1;
-        if ( (!a || isNaN(a)) && (!b || isNaN(b))) return 0;
+        if ( (!a || isNaN(a)) && !(!b || isNaN(b))) {return 1;}
+        if ( !(!a || isNaN(a)) && (!b || isNaN(b))) {return -1;}
+        if ( (!a || isNaN(a)) && (!b || isNaN(b))) {return 0;}
 
         if (descending) {
             b = [a, a = b][0];
@@ -40,7 +39,7 @@ export async function get(first: number, count: number, descending: boolean, sea
         return a - b;
     });
     tradeList = tradeList.filter((offer) => {
-        if(!search) return true;
+        if(!search) {return true;}
         let offerSearchResults = false;
         if (Object.prototype.hasOwnProperty.call(offer, 'dict')) {
             offerSearchResults = [].concat(Object.keys(offer.dict.our), Object.keys(offer.dict.their)).some(item => {
@@ -49,6 +48,7 @@ export async function get(first: number, count: number, descending: boolean, sea
         }
         return offer.partner?.indexOf(search) > -1 || offerSearchResults;
     });
+    const tradeCount = tradeList.length;
     tradeList = tradeList.slice(first, count >= 0 ? first + count : undefined);
     const items = {};
     const trades = tradeList.map((offer) => {
@@ -64,7 +64,7 @@ export async function get(first: number, count: number, descending: boolean, sea
             time: offer.finishTimestamp,
             datetime: dayjs.unix(Math.floor(offer.finishTimestamp/1000)).format('ddd D-M-YYYY HH:mm'),
             value: offer.value
-		};
+        };
 
         if (typeof polldata.sent[offer.id] != 'undefined') {
             ret['lastState'] = data.ETradeOfferState[polldata.sent[offer.id]];
@@ -74,36 +74,36 @@ export async function get(first: number, count: number, descending: boolean, sea
 
         if (Object.prototype.hasOwnProperty.call(offer, 'dict')) {
             if (Object.keys(offer.dict.our).length > 0) {
-				tradeSide('our');
-			}
-			if (Object.keys(offer.dict.their).length > 0) {
-				tradeSide('their');
-			}
-		}
+                tradeSide('our');
+            }
+            if (Object.keys(offer.dict.their).length > 0) {
+                tradeSide('their');
+            }
+        }
 
-		return ret;
+        return ret;
 
-		/**
+        /**
 		 * Get items from one side of a trade
 		 * @param {'our'|'their'} side
 		 */
-		function tradeSide(side) {
-			Object.keys(offer.dict[side]).forEach((k) => {
-				if (!Object.prototype.hasOwnProperty.call(items, k)) {
-					items[k] = createTradeItem(k, schema);
-				}
-				ret.items[side].push({
-					sku: k,
-					amount: offer.dict[side][k]
-				});
-			});
-		}
-	});
-	return {
-		trades,
-		items,
-		tradeCount: tradeList.length
-	};
+        function tradeSide(side) {
+            Object.keys(offer.dict[side]).forEach((k) => {
+                if (!Object.prototype.hasOwnProperty.call(items, k)) {
+                    items[k] = createTradeItem(k, schema);
+                }
+                ret.items[side].push({
+                    sku: k,
+                    amount: offer.dict[side][k]
+                });
+            });
+        }
+    });
+    return {
+        trades,
+        items,
+        tradeCount
+    };
 };
 
 /**
