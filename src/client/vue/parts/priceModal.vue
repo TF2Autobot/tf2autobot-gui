@@ -23,7 +23,7 @@
             <div class="form-row">
 
             </div>
-            <div class="row" v-if="item.enabled&&(item.intent!==1)">
+            <div class="row" v-if="item.enabled&&(item.intent!=1)">
                 <div class="col">
                     <label for="pricebuykeys">Buy keys</label> <!-- TODO add autoprice back -->
                     <input type="number" class="form-control" id="pricebuykeys" name="buykeys" min="0" placeholder="Keys" required :disabled="item.autoprice" v-model="item.buy.keys">
@@ -33,7 +33,7 @@
                     <input type="number" class="form-control" id="pricebuymetal" name="buymetal" min="0" placeholder="Metal" step="any" required :disabled="item.autoprice" v-model="item.buy.metal">
                 </div>
             </div>
-            <div class="row" v-if="item.enabled&&(item.intent!==0)">
+            <div class="row" v-if="item.enabled&&(item.intent!=0)">
                 <div class="col">
                     <label for="pricesellkeys">Sell keys</label>
                     <input type="number" class="form-control" id="pricesellkeys" name="sellkeys" min="0" placeholder="Keys" required :disabled="item.autoprice" v-model="item.sell.keys">
@@ -47,9 +47,9 @@
                 <div class="col" id="priceintentdiv">
                     <label for="priceintent">Intent</label>
                     <select name="intent" class="form-control" id="priceintent"  v-model="item.intent">
-                        <option value="2">Bank (buy and sell)</option>
-                        <option value="0">Buy</option>
-                        <option value="1">Sell</option>
+                        <option value=2>Bank (buy and sell)</option>
+                        <option value=0>Buy</option>
+                        <option value=1>Sell</option>
                     </select>
                 </div>
                 <div class="col">
@@ -61,13 +61,13 @@
                     <input type="number" class="form-control" id="pricemaximum" name="max" min="0" required v-model="item.max">
                 </div>
             </div>
-            <div class="row" v-if="item.enabled &&(item.intent!==1)">
+            <div class="row" v-if="item.enabled &&(item.intent!=1)">
                 <div class="col">
                     <label for="buynote">Buy Note</label>
                     <input type="text" name="buynote" id="buynote" v-model="item.note.buy">
                 </div>
             </div>
-            <div class="row" v-if="item.enabled &&(item.intent!==0)">
+            <div class="row" v-if="item.enabled &&(item.intent!=0)">
                 <div class="col">
                     <label for="sellnote">Sell Note</label>
                     <input type="text" name="buynote" id="sellnote" v-model="item.note.sell">

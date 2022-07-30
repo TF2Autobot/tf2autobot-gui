@@ -12,7 +12,7 @@ export default function process(item: PricelistItem, schema: Schema): PricelistI
         item.name = schema.getName(SKU.fromString(item.sku));
     }
     item.statslink = getStatsLink(item.sku, schema);
-    [item.buy, item.sell].forEach((prices)=>{
+    [item.buy, item.sell].forEach((prices) => {
         const currency = new Currency({
             metal: prices.metal,
             keys: prices.keys
