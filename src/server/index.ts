@@ -39,8 +39,8 @@ schemaManager.init(err => {
         initApp(app, schemaManager, botConnectionManager);
         if(process.env.SSL === 'true') {
             const credentials = {
-                key: fs.readFileSync('local.key', 'utf8'),
-                cert: fs.readFileSync('local.crt', 'utf8')
+                key: fs.readFileSync(process.env.CERT_KEY || 'local.key', 'utf8'),
+                cert: fs.readFileSync(process.env.CERT_FILE || 'local.crt', 'utf8')
             };
             const httpsServer = https.createServer(credentials, app);
             httpsServer.listen(portHttps);

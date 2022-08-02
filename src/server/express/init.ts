@@ -3,12 +3,15 @@ import initBody from './body';
 import initPassport from './passport';
 import initNjs from './nunjucks';
 import initRoutes from './routes';
+import initLanding from './landing';
 import SchemaManager from "@tf2autobot/tf2-schema";
 import type BotConnectionManager from "../IPC";
 
 export = function init(app: Express, schemaManager: SchemaManager, botManager: BotConnectionManager): void {
     app.use(express.static('./public'))
     initBody(app);
+    initLanding(app, schemaManager, botManager);
+    
     if(process.env.STEAM_AUTH) {
         initPassport(app, botManager);
     }

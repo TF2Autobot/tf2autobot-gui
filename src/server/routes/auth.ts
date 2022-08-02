@@ -11,7 +11,7 @@ passport.authenticate('steam', {
 	failureRedirect: '/'
 }),
 (req, res) => {
-	res.redirect('/');
+	res.redirect('/home');
 });
 
 export = router;

@@ -17,17 +17,21 @@ import SchemaManager from "@tf2autobot/tf2-schema";
 import BotConnectionManager from "../IPC";
 
 //do not use TS export so I can use require
+
+
+
 export = function init(schemaManager: SchemaManager, botManager: BotConnectionManager) : Router {
     const router = express.Router();
+
     router
-        .get('/', (req, res) => {
+        .get('/home', (req, res) => {
             res.render('index', { user: req.user });
         })
         .use('/config', config(schemaManager, botManager))
         //.use('/removeItems', removeItems)
         //.use('/clearPricelist', clearPricelist)
         //.use('/addItem', addItem(schemaManager))
-        //.use('/addItems', addItems(schemaManager))
+        //.use('/addItems', addItems(schemaManager))    
         .use('/trades', trades(schemaManager, botManager))
         //.use('/changeItem', changeItem)
         .use('/search', search(schemaManager))

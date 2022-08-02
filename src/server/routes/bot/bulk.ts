@@ -11,7 +11,7 @@ export = function (schemaManager: SchemaManager, botManager: BotConnectionManage
     router.post('/', async (req,res)=>{
         console.log(req.body);
         console.log('herre')
-        const input = req.body.input.split(/\r?\n/);
+        const input = req.body.input.split(/\r?\n/).map(item => item.trim?.());
 
         if (req.body.max - req.body.min < 0) {
             res.json({
