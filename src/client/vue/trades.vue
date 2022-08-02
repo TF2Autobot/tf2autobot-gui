@@ -131,6 +131,7 @@ export default {
             this.loadTrades(0, this.toShow);
         },
         search: function() {
+            this.toShow = 50;
             this.loadTrades(0, this.toShow);
         },
         acceptedOnly: function () {
