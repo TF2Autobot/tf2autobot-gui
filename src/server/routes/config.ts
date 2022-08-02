@@ -22,6 +22,27 @@ function toType(source, val) {
     }
 }
 
+/***
+ * Function that converts val to the same type as is on source
+ * @param source
+ * @param val
+ */
+function toType(source, val) {
+    switch (typeof source) {
+    case 'boolean':
+        return val==='true' ? true : val === 'false' ? false : source;
+    case 'number':
+        return Number(val);
+    case 'string':
+        return String(val);
+    case 'undefined':
+        return undefined;
+    default:
+    case 'object':
+        return typeof val === 'string' ? JSON.parse(val) : val;
+    }
+}
+
 export default function config(schemaManager: SchemaManager, botManager: BotConnectionManager): Router {
     const router = express.Router();
     router.get('/', async (req, res) => {

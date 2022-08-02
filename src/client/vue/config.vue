@@ -6,7 +6,6 @@
                  :key="key">
                 <recursive-option :for="key" :level="2" :data="value" :parent="key"></recursive-option>
             </div>
-
             <div class="text-center">
                 <input type="submit" value="Save Changes">
             </div>
@@ -38,6 +37,7 @@ export default {
                 })
                 .then((data) => {
                     this.options = data;
+
                 })
                 .catch((error) => {
                     console.error('Error: ', error);
@@ -59,7 +59,6 @@ export default {
     },
 };
 </script>
-
 
 <style scoped lang="scss">
     input[type=submit] {

@@ -2,6 +2,7 @@
     <component :is="`h${level}`">{{this.for}}</component>
     <div v-for="(value, key) of data"
         :key="key"
+
         :style="{
             'border-left': `#29a30e solid ${10-level*2}px`}">
         <component :is="isObject(value) ? 'recursive-option' : 'label'"
