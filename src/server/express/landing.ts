@@ -5,5 +5,9 @@ import BotConnectionManager from "../IPC";
 export default function init(app: Express, schemaManager: SchemaManager, botManager: BotConnectionManager): void {
     app.get('/', (req, res) => {
         res.render('landing');
-    });    
+    });
+
+    app.get('/developers', (req, res)=>{
+        res.render('developers');
+    });
 }
