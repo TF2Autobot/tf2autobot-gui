@@ -4,49 +4,31 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="style/styleDevelopers.css">
+	
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 	<title>TF2AUTOBOT</title>
 </head>
 <style>
-* {
-	box-sizing: border-box;
-}
-
-html{
+html, body{
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 	scroll-behavior: smooth;
-}
-
-body{
 	color: #c0c0ba;
 }
-
 #particles {  
-	width:100%;
-	height: 600vh;
-	overflow:hidden;
-	background: #181818;
+	height: calc(2*100vh);  
+  	background: #181818;
 }
-
 #intro {
 	background-color: rgb(0,0,0,); 
   	background-color: rgba(0,0,0, 0.459);
     max-width: 1200px; 
 	padding: 20px;
-	position: absolute;
-	left: 50%;
-	top: 10%;
-	transform: translate(-50%, 50%);
-	min-height: 960px;
 }
-
 .devs{
 	margin-top: 50px;
 }
-
 .dev-info{
 	display: flex;
 	flex-direction: column;
@@ -54,165 +36,15 @@ body{
 	align-items: center;
 	margin-top: 50px;
 }
-
-
 .developer-img{
 	width: 150px;
 	height: 150px;
 }
-
-/* media queries for intro */
-@media screen and (max-width: 1600px){
-	#particles {  
-		height: 210vh;
-	}
-	
-	#intro{
-		height: 150vh;
-		top: 40%;
-	}
-
-}
-
-@media screen and (max-width: 1024px){
-	#particles {  
-		height: 210vh;
-	}
-	
-	#intro{
-		height: 100vh;
-		top: 20%;
-	}
-
-}
-
-@media screen and (max-width: 880px){
-	#particles {  
-		height: 230vh;
-	}
-
-	#intro{
-		height: 180vh;
-		top: 10%;
-	}
-}
-
-@media screen and (max-width: 834px){
-	#particles {  
-		height: 130vh;
-	}
-
-	#intro{
-		height: 110vh;
-		top: 10%;
-	}
-}
-
-
-@media screen and (max-width: 820px){
-	#particles {  
-		height: 230vh;
-	}
-
-	#intro{
-		height: 110vh;
-		top: 10%;
-	}
-}
-
-@media screen and (max-width: 768px){
-	#particles {  
-		height: 130vh;
-	}
-
-	#intro{
-		height: 110vh;
-		top: 20%;
-	}
-}
-
-@media screen and (max-width: 537px){
-	#particles {  
-		height: 240vh;
-	}
-
-	#intro{
-		height: 220vh;
-		top: 10%;
-	}
-}
-
-@media screen and (max-width: 476px){
-	#particles {  
-		height: 250vh;
-	}
-	
-	#intro{
-		height: 232vh;
-		top: 10%;
-	}
-}
-
-@media screen and (max-width: 411px){
-	#particles {  
-		height: 300vh;
-	}
-	
-	#intro{
-		height: 260vh;
-		top: 5%;
-	}
-}
-
-
-@media screen and (max-width: 375px){
-	#particles {  
-		height: 400vh;
-	}
-	
-	#intro{
-		height: 360vh;
-		top: 5%;
-	}
-}
-
-
-@media screen and (max-width: 360px){
-	#particles{
-		height: 470vh;
-	}
-
-	#intro{
-		height: 460vh;
-		top: 2%;
-	}
-}
-
-@media screen and (max-width: 325px){
-	#particles{
-		height: 440vh;
-	}
-	
-	#intro{
-		height: 390vh;
-		top: 2%;
-	}
-}
-
-@media screen and (max-width: 321px){
-	#particles{
-		height: 640vh;
-	}
-	
-	#intro{
-		height: 590vh;
-		top: -2%;
-	}
-} 
 </style>
-<body>
-	<div id="particles">  
-			<div id="intro" class="container-fluid pt-5 rounded">  
+<body id="particles">
+	<div>
+		<div  class="position relative">  
+			<div id="intro" class="container-fluid position-absolute top-50 start-50 translate-middle-x pt-5 rounded">  
 				<div class="pe-5 ps-5"> 
 					<p class="h1">Developers</p>
 					<p class="h5">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -289,7 +121,10 @@ body{
 				</div>
 
 			</div>
+	</div>	
+
 	</div>
+	
 		
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
@@ -302,7 +137,7 @@ body{
             lineColor: '#611312'
         });
         var intro = document.getElementById('intro');
-        intro.style.marginTop = - intro.offsetHeight / 2 + 'px';
+        intro.style.height = - intro.offsetHeight / 2 + 'px';
     }, false);
 
     </script>
