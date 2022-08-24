@@ -37,7 +37,8 @@
     "nunjucks": "^3.2.3",
     "passport": "^0.5.2",
     "passport-steam": "^1.0.17",
-    "vue": "^3.2.29"
+    "vue": "^3.2.29",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.1.9",
