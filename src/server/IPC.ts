@@ -19,7 +19,9 @@ export default class BotConnectionManager {
 
   private initiated: boolean;
 
-  private socket: typeof tls.Server;
+  private tlsServer: typeof tls.Server;
+
+  private serverSocket: typeof tls.Socket;
 
   constructor() {
     if (
@@ -42,14 +44,13 @@ export default class BotConnectionManager {
       fs.writeFileSync(`${process.cwd()}/cert/server.pub`, publicKey);
       fs.writeFileSync(`${process.cwd()}/cert/server.key`, privateKey);
     }
-    this.socket = tls.createServer(
+    this.tlsServer = tls.createServer(
       {
         key: fs.readFileSync(`${process.cwd()}/cert/server.key`),
         cert: fs.readFileSync(`${process.cwd()}/cert/server.pub`),
       },
       function (socket) {
-        // Send a friendly message
-        socket.write("I am the server sending you a message.");
+        this.serverSocket = socket;
 
         // Print the data that we received
         socket.on("data", function (data) {
@@ -71,15 +72,17 @@ export default class BotConnectionManager {
   }
 
   private getPricelist(socket, callback?) {
-    this.socket.emit(socket, "getPricelist");
+    this.serverSocket.emit(socket, "getPricelist");
     if (callback) {
-      this.socket.once("pricelist", callback);
+      this.serverSocket.once("pricelist", callback);
     }
   }
   private getInfo(socket, callback?) {
-    this.socket.emit(socket, "getInfo");
+    socket.emit("getInfo");
+    //socket.emit("getInfo");
     if (callback) {
-      this.socket.once("info", callback);
+      console.log(callback);
+      this.serverSocket.once("info", callback);
     }
   }
 
@@ -116,8 +119,8 @@ export default class BotConnectionManager {
     return new Promise<undefined | PricelistItem>((resolve, reject) => {
       if (!this.bots[id]) reject("no bot found");
       else {
-        this.socket.emit(this.bots[id].socket, `getOptions`);
-        this.socket.once("options", resolve);
+        this.serverSocket.emit(this.bots[id].socket, `getOptions`);
+        this.serverSocket.once("options", resolve);
       }
     });
   }
@@ -125,8 +128,8 @@ export default class BotConnectionManager {
     return new Promise<undefined | PricelistItem>((resolve, reject) => {
       if (!this.bots[id]) reject("no bot found");
       else {
-        this.socket.emit(this.bots[id].socket, `updateOptions`, options);
-        this.socket.once("optionsUpdated", resolve);
+        this.serverSocket.emit(this.bots[id].socket, `updateOptions`, options);
+        this.serverSocket.once("optionsUpdated", resolve);
       }
     });
   }
@@ -134,12 +137,12 @@ export default class BotConnectionManager {
     return new Promise<undefined | PricelistItem>((resolve, reject) => {
       if (!this.bots[id]) reject("no bot found");
       else {
-        this.socket.emit(
+        this.serverSocket.emit(
           this.bots[id].socket,
           "addItem",
           BotConnectionManager.cleanItem(item)
         );
-        this.socket.once("itemAdded", resolve);
+        this.serverSocket.once("itemAdded", resolve);
       }
     });
   }
@@ -147,12 +150,12 @@ export default class BotConnectionManager {
     return new Promise<undefined | PricelistItem>((resolve, reject) => {
       if (!this.bots[id]) reject("no bot found");
       else {
-        this.socket.emit(
+        this.serverSocket.emit(
           this.bots[id].socket,
           "updateItem",
           BotConnectionManager.cleanItem(item)
         );
-        this.socket.once("itemUpdated", resolve);
+        this.serverSocket.once("itemUpdated", resolve);
       }
     });
   }
@@ -160,8 +163,8 @@ export default class BotConnectionManager {
     return new Promise<undefined | PricelistItem>((resolve, reject) => {
       if (!this.bots[id]) reject("no bot found");
       else {
-        this.socket.emit(this.bots[id].socket, "removeItem", sku);
-        this.socket.once("itemRemoved", resolve);
+        this.serverSocket.emit(this.bots[id].socket, "removeItem", sku);
+        this.serverSocket.once("itemRemoved", resolve);
       }
     });
   }
@@ -170,8 +173,8 @@ export default class BotConnectionManager {
     return new Promise<undefined | PricelistItem>((resolve, reject) => {
       if (!this.bots[id]) reject("no bot found");
       else {
-        this.socket.emit(this.bots[id].socket, "getTrades");
-        this.socket.once("polldata", resolve); //TODO: cache
+        this.serverSocket.emit(this.bots[id].socket, "getTrades");
+        this.serverSocket.once("polldata", resolve); //TODO: cache
       }
     });
   }
@@ -180,8 +183,8 @@ export default class BotConnectionManager {
     return new Promise<string>((resolve, reject) => {
       if (!this.bots[id]) reject("this bot does not exist");
       else {
-        this.socket.emit(this.bots[id].socket, "sendChat", message);
-        this.socket.once("chatResp", resolve);
+        this.serverSocket.emit(this.bots[id].socket, "sendChat", message);
+        this.serverSocket.once("chatResp", resolve);
       }
     });
   }
@@ -191,26 +194,26 @@ export default class BotConnectionManager {
     const HOST = "127.0.0.1";
 
     // Start listening on a specific port and address
-    this.socket.listen(PORT, HOST, function () {
+    this.tlsServer.listen(PORT, HOST, function () {
       this.initiated = true;
       console.log("I'm listening at %s, on port %s", HOST, PORT);
     });
 
     // When an error occurs, show it.
-    this.socket.on("error", function (error) {
+    this.tlsServer.on("error", function (error) {
       console.error(error);
 
       // Close the connection after the error occurred.
-      this.socket.destroy();
+      this.tlsServer.destroy();
     });
-    this.socket.on("info", (data, socket) => {
+    this.tlsServer.on("info", (data, socket) => {
       if (!this.bots[data.id]) {
         console.log("bot id " + data.id);
         socket.id = data.id;
         this.bots[data.id] = { socket, ...data };
       }
     });
-    this.socket.on("pricelist", (data, socket) => {
+    this.tlsServer.on("pricelist", (data, socket) => {
       if (!data) {
         setTimeout(() => this.getPricelist(socket), 3000);
       } else {
@@ -220,10 +223,11 @@ export default class BotConnectionManager {
         this.bots[socket.id]["pricelistTS"] = Date.now();
       }
     });
-    this.socket.on("connect", (socket) => {
+    this.tlsServer.on("secureConnection", (socket) => {
+      console.log("Requesting info");
       this.getInfo(socket);
     });
-    this.socket.on("socket.disconnected", (socket) => {
+    this.tlsServer.on("drop", (socket) => {
       delete this.bots[socket.id];
     });
   }
