@@ -14,6 +14,7 @@ import * as http from "http";
 // import {Bot} from "./Bot";
 const port = +process.env.PORT;
 const portHttps = +process.env.PORT_HTTPS;
+const portNginx = +process.env.PORT_NGINX;
 
 console.log('tf2autobot-gui v' + require(path.join(process.cwd(), 'package.json')).version + ' is starting...');
 const app = express();
@@ -43,7 +44,7 @@ schemaManager.init(err => {
                 cert: fs.readFileSync(process.env.CERT_FILE || 'local.crt', 'utf8')
             };
             const httpsServer = https.createServer(credentials, app);
-            httpsServer.listen(portHttps);
+            httpsServer.listen(portNginx || portHttps);
         } else {
             const httpServer = http.createServer(app);
             httpServer.listen(port);
