@@ -44,7 +44,7 @@ schemaManager.init(err => {
                 cert: fs.readFileSync(process.env.CERT_FILE || 'local.crt', 'utf8')
             };
             const httpsServer = https.createServer(credentials, app);
-            httpsServer.listen(portNginx || portHttps);
+            httpsServer.listen(portNginx || portHttps, portNginx ? "127.0.0.1" : undefined);
         } else {
             const httpServer = http.createServer(app);
             httpServer.listen(port);
