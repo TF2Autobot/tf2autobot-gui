@@ -3,8 +3,8 @@ import StrategyPassport from 'passport-steam';
 import { Express } from "express";
 import BotConnectionManager from "../IPC";
 
-function filterBots(bot){
-    return bot.admins.includes(this.user.id)||bot.id===this.user.id||['76561198086791620','76561198162885342'].includes(this.user.id)
+function filterBots(bot) {
+    return bot.admins.includes(this.user.id) || bot.id === this.user.id
 }
 
 export =  function init(app: Express, botManager: BotConnectionManager): void {
