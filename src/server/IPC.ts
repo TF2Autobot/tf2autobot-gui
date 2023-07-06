@@ -157,7 +157,7 @@ export default class BotConnectionManager {
     }
 
     init() {
-        this.ipc.config.id = 'autobot_gui_dev';
+        this.ipc.config.id = 'autobot_gui';
         this.ipc.config.retry = 1500;
         this.ipc.config.logger = console.debug;
         this.ipc.config.readableAll = true;
