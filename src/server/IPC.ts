@@ -163,7 +163,6 @@ export default class BotConnectionManager {
         this.ipc.config.readableAll = true;
         this.ipc.config.writableAll = true;
         this.ipc.config.silent = process.env.NODE_ENV === 'production';
-        this.ipc.config.networkHost = process.env.ADDRESS;
         this.ipc.serveNet(() => {
             this.initiated = true;
             this.ipc.server.on(
