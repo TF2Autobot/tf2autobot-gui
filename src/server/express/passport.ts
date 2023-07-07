@@ -8,6 +8,13 @@ function filterBots(bot) {
 }
 
 export =  function init(app: Express, botManager: BotConnectionManager): void {
+    let port = process.env.PORT ?? 3000;
+    let ip = process.env.ADDRESS;
+
+    if (isNaN(+port)) {
+        port = 3000;
+    }
+
     const SteamStrategy = StrategyPassport.Strategy
 
     passport.serializeUser(function(user, done) {
@@ -17,10 +24,15 @@ export =  function init(app: Express, botManager: BotConnectionManager): void {
     passport.deserializeUser(function(obj, done) {
         done(null, obj);
     });
+    const portString = process.env.SSL === 'true' ?
+        port == 443 ? '' : `:${port}`
+        :
+        port == 80 ? '' : `:${port}`
+    const address = `http${process.env.SSL=='true'?'s':''}://${process.env.VPS == 'true' ? ip : '127.0.0.1'}${portString}`;
     passport.use(new SteamStrategy(
         {
-            returnURL: `https://gui.autobot.tf/auth/steam/return`,
-            realm: `https://gui.autobot.tf/`,
+            returnURL: `${address}/auth/steam/return`,
+            realm: `${address}/`,
             apiKey: process.env.API_KEY
         },
         function(identifier, profile, done) {
