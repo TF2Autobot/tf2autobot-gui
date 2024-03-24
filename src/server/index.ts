@@ -32,6 +32,23 @@ const app = express();
 const botConnectionManager = new BotConnectionManager();
 botConnectionManager.init();
 
+import { apiRequest } from './utils/apiRequest';
+
+// Make the schema manager request the schema from schema.autobot.tf
+
+/*eslint-disable */
+SchemaManager.prototype.getSchema = function (callback): void {
+    apiRequest('GET', 'https://schema.autobot.tf/schema')
+        .then(schema => {
+            this.setSchema(schema, true);
+            callback(null, this.schema);
+        })
+        .catch(err => {
+            callback(err);
+        });
+};
+/*eslint-enable */
+
 const schemaManager = new SchemaManager({ apiKey: process.env.API_KEY });
 schemaManager.init(err => {
     if(err) {
