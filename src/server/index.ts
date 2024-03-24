@@ -52,7 +52,7 @@ SchemaManager.prototype.getSchema = function (callback): void {
 const schemaManager = new SchemaManager({ apiKey: process.env.API_KEY });
 schemaManager.init(err => {
     if(err) {
-        console.log('Schema manager failed to init, with error: ' + err)
+        throw new Error('Schema manager failed to init, with error: ' + err);
     } else {
         initApp(app, schemaManager, botConnectionManager);
         if(process.env.SSL === 'true') {
